@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace antoinegleisberg.Pathfinding
 {
-    public class Dijkstra : IPathfindingStrategy
+    internal class Dijkstra : IPathfindingStrategy
     {
         private Func<Node, List<Pair<Node, int>>> _neighbours;
 

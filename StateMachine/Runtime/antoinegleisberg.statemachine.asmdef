@@ -1,5 +1,5 @@
 {
-    "name": "antoinegleisberg.statemachine",
+    "name": "antoinegleisberg.StateMachine",
     "rootNamespace": "antoinegleisberg.StateMachine",
     "references": [],
     "includePlatforms": [],

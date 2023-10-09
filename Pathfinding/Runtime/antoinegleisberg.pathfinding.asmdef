@@ -1,5 +1,5 @@
 {
-    "name": "antoinegleisberg.pathfinding",
+    "name": "antoinegleisberg.Pathfinding",
     "rootNamespace": "antoinegleisberg.Pathfinding",
     "references": [
         "GUID:9e231bd6491211440b930c6a47b0e255"

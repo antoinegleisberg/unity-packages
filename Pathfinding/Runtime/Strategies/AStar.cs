@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace antoinegleisberg.Pathfinding
 {
-    public class AStar : IPathfindingStrategy
+    internal class AStar : IPathfindingStrategy
     {
         private Dictionary<Node, int> _gScore; // cost to reach that node
         private Dictionary<Node, int> _fScore; // g + h
