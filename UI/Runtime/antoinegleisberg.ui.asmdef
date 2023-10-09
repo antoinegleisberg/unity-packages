@@ -1,0 +1,17 @@
+{
+    "name": "antoinegleisberg.ui",
+    "rootNamespace": "antoinegleisberg.UI",
+    "references": [
+        "GUID:9e231bd6491211440b930c6a47b0e255",
+        "GUID:30452e600233c54418ebbc7283dff525"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
