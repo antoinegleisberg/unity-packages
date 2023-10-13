@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace antoinegleisberg.Tools
 {
-    public static class Utilities
+    public static class ListUtilities
     {
         public static List<T> ShallowCopy<T>(List<T> list)
         {
@@ -18,7 +18,7 @@ namespace antoinegleisberg.Tools
             return result;
         }
 
-        public static List<T> ShuffleList<T>(List<T> list)
+        public static List<T> Shuffle<T>(List<T> list)
         {
             List<T> result = new List<T>();
 
@@ -34,6 +34,20 @@ namespace antoinegleisberg.Tools
             }
 
             return result;
+        }
+
+        public static bool ContainsDuplicates<T>(List<T> list)
+        {
+            HashSet<T> set = new HashSet<T>();
+            foreach (T element in list)
+            {
+                if (set.Contains(element))
+                {
+                    return true;
+                }
+                set.Add(element);
+            }
+            return false;
         }
     }
 }

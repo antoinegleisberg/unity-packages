@@ -1,0 +1,14 @@
+{
+    "name": "antoinegleisberg.Time.Clock",
+    "rootNamespace": "antoinegleisberg.Time.Clock",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
