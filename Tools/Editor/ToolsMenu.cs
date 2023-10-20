@@ -29,12 +29,14 @@ namespace antoinegleisberg.Tools.Editor
         {
             GameObject Managers = new GameObject("Managers");
             GameObject Divider1 = new GameObject("--------");
-            GameObject Environment = new GameObject("Environment");
+            GameObject Setup = new GameObject("Setup");
             GameObject Divider2 = new GameObject("--------");
-            GameObject Units = new GameObject("Units");
+            GameObject Environment = new GameObject("Environment");
             GameObject Divider3 = new GameObject("--------");
-            GameObject Canvases = new GameObject("Canvases");
+            GameObject Units = new GameObject("Units");
             GameObject Divider4 = new GameObject("--------");
+            GameObject Canvases = new GameObject("Canvases");
+            GameObject Divider5 = new GameObject("--------");
             GameObject Systems = new GameObject("Systems");
         }
     }
