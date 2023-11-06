@@ -15,15 +15,4 @@ namespace antoinegleisberg.InventorySystem
         public bool IsEmpty();
         public List<T> GetItemsList();
     }
-
-    public static class InventoryBuilder<T>
-    {
-        public static IInventory<T> CreateUnlimitedSlotsInventory(int maxItems) => new UnlimitedSlotsInventory<T>(maxItems);
-
-        public static IInventory<T> CreateLimitedSlotsInventory(int maxSlots) => new LimitedSlotsInventory<T>(maxSlots);
-
-        public static IInventory<T> CreateUnlimitedSizeInventory() => new UnlimitedSizeInventory<T>();
-
-        public static IInventory<T> CreateLimitedSlotSizeInventory(int maxSlots, Func<T, int> maxStackSize) => new LimitedSlotSizeInventory<T>(maxSlots, maxStackSize);
-    }
 }
