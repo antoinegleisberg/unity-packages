@@ -77,6 +77,8 @@ namespace antoinegleisberg.Pathfinding
                     }
                 }
             }
+            
+            // No path was found, the two nodes are not connected
             return null;
         }
 

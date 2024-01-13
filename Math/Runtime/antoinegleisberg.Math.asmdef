@@ -1,6 +1,6 @@
 {
-    "name": "antoinegleisberg.InventorySystem",
-    "rootNamespace": "antoinegleisberg.InventorySystem",
+    "name": "antoinegleisberg.Math",
+    "rootNamespace": "antoinegleisberg.Math",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace antoinegleisberg.Pathfinding
 {
-    internal class Node
+    public class Node
     {
         private static List<Guid> _guids;
 

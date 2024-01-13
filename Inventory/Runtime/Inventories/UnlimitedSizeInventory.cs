@@ -3,16 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace antoinegleisberg.InventorySystem
+namespace antoinegleisberg.Inventory
 {
     internal class UnlimitedSizeInventory<T> : IInventory<T>
     {
-        public void AddItems(T item, int count)
+        public void AddItems(Dictionary<T, int> items)
         {
             throw new NotImplementedException();
         }
 
-        public bool Contains(T item)
+        public bool CanAddItems(Dictionary<T, int> items)
         {
             throw new NotImplementedException();
         }
@@ -22,17 +22,17 @@ namespace antoinegleisberg.InventorySystem
             throw new NotImplementedException();
         }
 
-        public List<T> GetItemsList()
-        {
-            throw new NotImplementedException();
-        }
-
         public bool IsEmpty()
         {
             throw new NotImplementedException();
         }
 
-        public void RemoveItems(T item, int count)
+        public Dictionary<T, int> Items()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveItems(Dictionary<T, int> items)
         {
             throw new NotImplementedException();
         }

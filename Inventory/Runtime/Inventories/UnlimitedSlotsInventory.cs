@@ -1,59 +1,42 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
-
-namespace antoinegleisberg.InventorySystem
+namespace antoinegleisberg.Inventory
 {
     internal class UnlimitedSlotsInventory<T> : IInventory<T>
     {
         private Dictionary<T, int> _items;
-        private int _maxItems;
-        private int _itemCount;
+        private int _maxCapacity;
+        private int _capacity;
+        private Func<T, int> _itemSizes;
 
-        public UnlimitedSlotsInventory(int maxItems)
+        public UnlimitedSlotsInventory(int maxCapacity, Func<T, int> itemSizes)
         {
             _items = new Dictionary<T, int>();
-            _maxItems = maxItems;
-            _itemCount = 0;
+            _maxCapacity = maxCapacity;
+            _capacity = 0;
+            _itemSizes = itemSizes;
         }
 
-        public int RemainingCapacity => _maxItems - _itemCount;
+        public bool IsEmpty() => _capacity == 0;
 
-        public bool Contains(T item) => GetItemCount(item) > 0;
-
-        public bool IsEmpty() => _itemCount == 0;
-
-        public void AddItems(T item, int amount)
+        public void RemoveItems(Dictionary<T, int> items)
         {
-            if (amount > RemainingCapacity)
+            foreach (KeyValuePair<T, int> item in items)
             {
-                throw new Exception("Not enough space in inventory");
-            }
+                if (GetItemCount(item.Key) < item.Value)
+                {
+                    throw new Exception("Cannot remove more items from inventory than the count it contains");
+                }
 
-            _itemCount += amount;
-            if (Contains(item))
-            {
-                _items[item] += amount;
-            }
-            else
-            {
-                _items.Add(item, amount);
-            }
-        }
+                _items[item.Key] -= item.Value;
+                _capacity -= item.Value * _itemSizes(item.Key);
 
-        public void RemoveItems(T item, int amount)
-        {
-            if (GetItemCount(item) < amount)
-            {
-                throw new Exception("Cannot remove more items from inventory than the amount it contains");
-            }
-
-            _items[item] -= amount;
-            _itemCount -= amount;
-
-            if (_items[item] == 0)
-            {
-                _items.Remove(item);
+                if (_items[item.Key] == 0)
+                {
+                    _items.Remove(item.Key);
+                }
             }
         }
 
@@ -66,14 +49,40 @@ namespace antoinegleisberg.InventorySystem
             return 0;
         }
 
-        public List<T> GetItemsList()
+        public bool CanAddItems(Dictionary<T, int> items)
         {
-            List<T> listItems = new List<T>();
-            foreach (T item in _items.Keys)
+            int currentCapacity = _capacity;
+            foreach (KeyValuePair<T, int> item in items)
             {
-                listItems.Add(item);
+                currentCapacity += item.Value * _itemSizes(item.Key);
             }
-            return listItems;
+            return currentCapacity <= _maxCapacity;
+        }
+
+        public void AddItems(Dictionary<T, int> items)
+        {
+            if (!CanAddItems(items))
+            {
+                throw new Exception("Cannot add more items to inventory than its capacity");
+            }
+
+            foreach (KeyValuePair<T, int> item in items)
+            {
+                _capacity += item.Value * _itemSizes(item.Key);
+                if (_items.ContainsKey(item.Key))
+                {
+                    _items[item.Key] += item.Value;
+                }
+                else
+                {
+                    _items.Add(item.Key, item.Value);
+                }
+            }
+        }
+
+        public Dictionary<T, int> Items()
+        {
+            return new Dictionary<T, int>(_items);
         }
     }
 }

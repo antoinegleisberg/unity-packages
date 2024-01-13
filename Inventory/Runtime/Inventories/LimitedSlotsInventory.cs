@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace antoinegleisberg.InventorySystem
+namespace antoinegleisberg.Inventory
 {
     internal class LimitedSlotsInventory<T> : IInventory<T>
     {
@@ -14,26 +14,60 @@ namespace antoinegleisberg.InventorySystem
             _maxSlots = maxSlots;
             _items = new Dictionary<T, int>();
         }
-
-        public void AddItems(T item, int count)
+        
+        public bool CanAddItems(Dictionary<T, int> items)
         {
-            if (_items.ContainsKey(item))
+            int occupiedSlots = _items.Count;
+            foreach (KeyValuePair<T, int> item in items)
             {
-                _items[item] += count;
+                if (!_items.ContainsKey(item.Key))
+                {
+                    occupiedSlots++;
+                }
             }
-            else if (_items.Count < _maxSlots)
-            {
-                _items.Add(item, count);
-            }
-            else
+            return occupiedSlots <= _maxSlots;
+        }
+
+        public void AddItems(Dictionary<T, int> items)
+        {
+            if (!CanAddItems(items))
             {
                 throw new Exception("Inventory is full");
             }
+
+            foreach (KeyValuePair<T, int> item in items)
+            {
+                if (_items.ContainsKey(item.Key))
+                {
+                    _items[item.Key] += item.Value;
+                }
+                else
+                {
+                    _items.Add(item.Key, item.Value);
+                }
+            }
         }
 
-        public bool Contains(T item)
+        public void RemoveItems(Dictionary<T, int> items)
         {
-            return _items.ContainsKey(item);
+            foreach (KeyValuePair<T, int> item in items)
+            {
+                if (item.Value <= 0)
+                {
+                    continue;
+                }
+
+                if (!_items.ContainsKey(item.Key) || _items[item.Key] < item.Value)
+                {
+                    throw new Exception("Not enough items");
+                }
+
+                _items[item.Key] -= item.Value;
+                if (_items[item.Key] == 0)
+                {
+                    _items.Remove(item.Key);
+                }
+            }
         }
 
         public int GetItemCount(T item)
@@ -48,33 +82,14 @@ namespace antoinegleisberg.InventorySystem
             }
         }
 
-        public List<T> GetItemsList()
-        {
-            return new List<T>(_items.Keys);
-        }
-
         public bool IsEmpty()
         {
             return _items.Count == 0;
         }
 
-        public void RemoveItems(T item, int count)
+        public Dictionary<T, int> Items()
         {
-            if (count <= 0)
-            {
-                return;
-            }
-
-            if (!_items.ContainsKey(item) || _items[item] < count)
-            {
-                throw new Exception("Not enough items");
-            }
-            
-            _items[item] -= count;
-            if (_items[item] == 0)
-            {
-                _items.Remove(item);
-            }
+            return new Dictionary<T, int>(_items);
         }
     }
 }
