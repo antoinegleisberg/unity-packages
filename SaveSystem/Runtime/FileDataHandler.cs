@@ -1,8 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections.Generic;
 
 namespace antoinegleisberg.SaveSystem
 {
@@ -10,7 +10,7 @@ namespace antoinegleisberg.SaveSystem
     {
         private static readonly string _dataDirectoryPath = Application.persistentDataPath;
 
-        public static void SaveData(string filePath, GameData data)
+        public static void SaveData(string filePath, object data)
         {
             string fullPath = Path.Combine(_dataDirectoryPath, filePath);
 
@@ -25,6 +25,10 @@ namespace antoinegleisberg.SaveSystem
                     {
                         writer.Write(dataToStore);
                     }
+
+                    // or 
+                    // BinaryFormatter binaryFormatter = new BinaryFormatter();
+                    // binaryFormatter.Serialize(stream, data);
                 }
                 Debug.Log($"Save data to {fullPath}");
             }
@@ -34,11 +38,11 @@ namespace antoinegleisberg.SaveSystem
             }
         }
 
-        public static GameData LoadData(string filePath)
+        public static object LoadData(string filePath)
         {
             string fullPath = Path.Combine(_dataDirectoryPath, filePath);
 
-            GameData loadedData = null;
+            object loadedData = null;
             if (File.Exists(fullPath))
             {
                 try
@@ -50,9 +54,13 @@ namespace antoinegleisberg.SaveSystem
                         {
                             dataToLoad = reader.ReadToEnd();
                         }
+                        
+                        // or
+                        // BinaryFormatter binaryFormatter = new BinaryFormatter();
+                        // loadedData = binaryFormatter.Deserialize(stream);
                     }
 
-                    loadedData = JsonUtility.FromJson<GameData>(dataToLoad);
+                    loadedData = JsonUtility.FromJson<object>(dataToLoad);
                     Debug.Log($"Read save data from {fullPath}");
                 }
                 catch (Exception e)
@@ -62,6 +70,19 @@ namespace antoinegleisberg.SaveSystem
             }
             return loadedData;
         }
-    }
 
+        public static void DeleteFile(string filePath)
+        {
+            string fullPath = Path.Combine(_dataDirectoryPath, filePath);
+
+            if (!File.Exists(fullPath))
+            {
+                Debug.LogError($"File to delete did not exist:\n{fullPath}");
+                return;
+            }
+
+            Debug.Log($"Deleted file: {fullPath}");
+            File.Delete(fullPath);
+        }
+    }
 }

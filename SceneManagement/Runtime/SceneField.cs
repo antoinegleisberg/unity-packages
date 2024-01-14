@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace BavarianKitchen
+namespace antoinegleisberg.SceneManagement
 {
     [System.Serializable]
     public class SceneField

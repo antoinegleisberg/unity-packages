@@ -62,5 +62,4 @@ namespace antoinegleisberg.SaveSystem
             return false;
         }
     }
-
 }

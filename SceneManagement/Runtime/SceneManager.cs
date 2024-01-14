@@ -4,29 +4,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace BavarianKitchen
+namespace antoinegleisberg.SceneManagement
 {
     public class SceneManager : MonoBehaviour
     {
         public static SceneManager Instance { get; private set; }
 
-        [SerializeField] private SceneField _initialScene;
+        private HashSet<string> _loadedScenes;
 
-        private HashSet<string> _loadedScenes = new HashSet<string>();
-
+        
         private void Awake()
         {
             Instance = this;
+            _loadedScenes = new HashSet<string>();
         }
 
-        private void Start()
+        public void LoadScene(string sceneName, Action onSceneLoaded = null)
         {
-            LoadScene(_initialScene);
+            LoadScenes(new List<string>() { sceneName }, onSceneLoaded);
         }
 
         public void LoadScenes(List<string> scenes, Action onScenesLoaded = null)
         {
             StartCoroutine(LoadScenesCoroutine(scenes, onScenesLoaded));
+        }
+
+        public void UnloadScenes(string sceneName, Action onSceneUnloaded = null)
+        {
+            UnloadScenes(new List<string>() { sceneName }, onSceneUnloaded);
         }
 
         public void UnloadScenes(List<string> scenes, Action onScenesUnloaded = null)
@@ -45,9 +50,9 @@ namespace BavarianKitchen
                     continue;
                 }
 
-                loadingOperations.Add(LoadScene(sceneName));
+                loadingOperations.Add(LoadSceneAsync(sceneName));
             }
-            
+
             foreach (AsyncOperation loadingOperation in loadingOperations)
             {
                 yield return new WaitUntil(() => loadingOperation.isDone);
@@ -56,7 +61,7 @@ namespace BavarianKitchen
             onScenesLoaded?.Invoke();
         }
 
-        private AsyncOperation LoadScene(string sceneName)
+        private AsyncOperation LoadSceneAsync(string sceneName)
         {
             AsyncOperation loadingOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
             _loadedScenes.Add(sceneName);
@@ -74,7 +79,7 @@ namespace BavarianKitchen
                     continue;
                 }
 
-                unloadingOperations.Add(UnloadScene(sceneName));
+                unloadingOperations.Add(UnloadSceneAsync(sceneName));
             }
 
             foreach (AsyncOperation loadingOperation in unloadingOperations)
@@ -85,7 +90,7 @@ namespace BavarianKitchen
             onScenesUnloaded?.Invoke();
         }
 
-        private AsyncOperation UnloadScene(string sceneName)
+        private AsyncOperation UnloadSceneAsync(string sceneName)
         {
             AsyncOperation unloadingOperation = UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(sceneName);
             _loadedScenes.Remove(sceneName);
