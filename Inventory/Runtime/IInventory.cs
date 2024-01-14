@@ -8,7 +8,7 @@ namespace antoinegleisberg.Inventory
     {
         public bool CanAddItems(Dictionary<T, int> items);
         public bool CanAddItems(T item, int count) => CanAddItems(new Dictionary<T, int>() { { item, count } });
-        public void CanAddItem(T item) => CanAddItems(item, 1);
+        public bool CanAddItem(T item) => CanAddItems(item, 1);
         public void AddItems(Dictionary<T, int> items);
         public void AddItems(T item, int count) => AddItems(new Dictionary<T, int>() { { item, count } });
         public void AddItem(T item) => AddItems(item, 1);
