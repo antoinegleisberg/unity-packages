@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+using antoinegleisberg.Types;
 
 namespace antoinegleisberg.SaveSystem
 {
@@ -9,19 +9,19 @@ namespace antoinegleisberg.SaveSystem
     {
         public static SaveSystem Instance { get; private set; }
 
-        private Dictionary<string, Dictionary<string, object>> _gameState;
+        private SerializableDictionary<string, SerializableDictionary<string, object>> _gameState;
 
         private void Awake()
         {
             Instance = this;
-            _gameState = new Dictionary<string, Dictionary<string, object>>();
+            _gameState = new SerializableDictionary<string, SerializableDictionary<string, object>>();
         }
 
         public void LoadSave(string filePath)
         {
             object gameData = FileDataHandler.LoadData(filePath);
 
-            _gameState = (Dictionary<string, Dictionary<string, object>>)gameData;
+            _gameState = (SerializableDictionary<string, SerializableDictionary<string, object>>)gameData;
 
             LoadEntitiesState(FindObjectsOfType<SaveableEntity>().ToList());
         }
@@ -71,6 +71,10 @@ namespace antoinegleisberg.SaveSystem
             {
                 string sceneName = saveableEntity.gameObject.scene.name;
                 string uid = saveableEntity.GetComponent<GuidHolder>().UniqueId;
+                if (!_gameState.ContainsKey(sceneName))
+                {
+                    _gameState.Add(sceneName, new SerializableDictionary<string, object>());
+                }
                 _gameState[sceneName][uid] = saveableEntity.GetSaveData();
             }
         }
