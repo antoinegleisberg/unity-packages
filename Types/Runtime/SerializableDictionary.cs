@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 namespace antoinegleisberg.Types
-{ 
+{
     [System.Serializable]
     public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
     {

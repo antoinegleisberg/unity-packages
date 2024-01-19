@@ -9,19 +9,18 @@ namespace antoinegleisberg.SaveSystem
     {
         public static SaveSystem Instance { get; private set; }
 
-        private SerializableDictionary<string, SerializableDictionary<string, object>> _gameState;
+        private SerializableDictionary<string, object> _gameState = new SerializableDictionary<string, object>();
 
         private void Awake()
         {
             Instance = this;
-            _gameState = new SerializableDictionary<string, SerializableDictionary<string, object>>();
         }
 
         public void LoadSave(string filePath)
         {
             object gameData = FileDataHandler.LoadData(filePath);
 
-            _gameState = (SerializableDictionary<string, SerializableDictionary<string, object>>)gameData;
+            _gameState = (SerializableDictionary<string, object>)gameData;
 
             LoadEntitiesState(FindObjectsOfType<SaveableEntity>().ToList());
         }
@@ -56,11 +55,16 @@ namespace antoinegleisberg.SaveSystem
         {
             foreach (SaveableEntity saveableEntity in saveableEntities)
             {
-                string sceneName = saveableEntity.gameObject.scene.name;
+                //string sceneName = saveableEntity.gameObject.scene.name;
+                //string uid = saveableEntity.GetComponent<GuidHolder>().UniqueId;
+                //if (_gameState.ContainsKey(sceneName) && _gameState[sceneName].ContainsKey(uid))
+                //{
+                //    saveableEntity.LoadData(_gameState[sceneName][uid]);
+                //}
                 string uid = saveableEntity.GetComponent<GuidHolder>().UniqueId;
-                if (_gameState.ContainsKey(sceneName) && _gameState[sceneName].ContainsKey(uid))
+                if (_gameState.ContainsKey(uid))
                 {
-                    saveableEntity.LoadData(_gameState[sceneName][uid]);
+                    saveableEntity.LoadData(_gameState[uid]);
                 }
             }
         }
@@ -69,13 +73,16 @@ namespace antoinegleisberg.SaveSystem
         {
             foreach (SaveableEntity saveableEntity in saveableEntities)
             {
-                string sceneName = saveableEntity.gameObject.scene.name;
+                //string sceneName = saveableEntity.gameObject.scene.name;
+                //string uid = saveableEntity.GetComponent<GuidHolder>().UniqueId;
+                //if (!_gameState.ContainsKey(sceneName))
+                //{
+                //    _gameState.Add(sceneName, new SerializableDictionary<string, object>());
+                //}
+                //_gameState[sceneName][uid] = saveableEntity.GetSaveData();
                 string uid = saveableEntity.GetComponent<GuidHolder>().UniqueId;
-                if (!_gameState.ContainsKey(sceneName))
-                {
-                    _gameState.Add(sceneName, new SerializableDictionary<string, object>());
-                }
-                _gameState[sceneName][uid] = saveableEntity.GetSaveData();
+                _gameState[uid] = saveableEntity.GetSaveData();
+                Debug.Log($"Saved data for {saveableEntity.name}: {_gameState[uid]}");
             }
         }
 

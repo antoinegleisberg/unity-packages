@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -15,6 +14,11 @@ namespace antoinegleisberg.SaveSystem
 
         public string UniqueId => _uid;
 
+        private void Awake()
+        {
+            // Handles objects created at runtime
+            CreateUID();
+        }
 
 #if UNITY_EDITOR
         // Update method used for generating UUID of the SavableEntity
@@ -26,6 +30,12 @@ namespace antoinegleisberg.SaveSystem
             // don't generate Id for prefabs (prefab scene will have path as null)
             if (String.IsNullOrEmpty(gameObject.scene.path)) return;
 
+            CreateUID();
+        }
+#endif
+
+        private void CreateUID()
+        {
             SerializedObject serializedObject = new SerializedObject(this);
             SerializedProperty property = serializedObject.FindProperty("_uid");
 
@@ -37,7 +47,6 @@ namespace antoinegleisberg.SaveSystem
 
             _globalLookup[property.stringValue] = this;
         }
-#endif
 
         private bool IsUnique(string candidate)
         {

@@ -2,7 +2,6 @@ using UnityEngine;
 using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Collections.Generic;
 
 namespace antoinegleisberg.SaveSystem
 {
@@ -17,6 +16,7 @@ namespace antoinegleisberg.SaveSystem
             try
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+
                 string dataToStore = JsonUtility.ToJson(data, true);
 
                 using (FileStream stream = new FileStream(fullPath, FileMode.Create))

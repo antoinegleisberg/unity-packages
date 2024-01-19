@@ -1,5 +1,6 @@
 {
-    "name": "com.antoinegleisberg.savesystem",
-    "version": "1.0.0",
-    "displayName": "Antoine Save System"
+  "name": "com.antoinegleisberg.savesystem",
+  "version": "1.0.0",
+  "displayName": "Antoine Save System",
+  "dependencies": {}
 }
