@@ -12,7 +12,6 @@ namespace antoinegleisberg.SceneManagement
 
         private HashSet<string> _loadedScenes;
 
-        
         private void Awake()
         {
             Instance = this;

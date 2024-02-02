@@ -2,7 +2,7 @@
     "name": "antoinegleisberg.SaveSystem",
     "rootNamespace": "antoinegleisberg.SaveSystem",
     "references": [
-        "GUID:9e231bd6491211440b930c6a47b0e255"
+        "GUID:63dba531ccb02b54da80b6eee9559729"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

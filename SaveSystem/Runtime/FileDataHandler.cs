@@ -1,11 +1,11 @@
 using UnityEngine;
 using System;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+using Newtonsoft.Json;
 
 namespace antoinegleisberg.SaveSystem
 {
-    public static class FileDataHandler
+    internal static class FileDataHandler
     {
         private static readonly string _dataDirectoryPath = Application.persistentDataPath;
 
@@ -17,7 +17,10 @@ namespace antoinegleisberg.SaveSystem
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
 
-                string dataToStore = JsonUtility.ToJson(data, true);
+                string dataToStore = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.All
+                });
 
                 using (FileStream stream = new FileStream(fullPath, FileMode.Create))
                 {
@@ -60,7 +63,10 @@ namespace antoinegleisberg.SaveSystem
                         // loadedData = binaryFormatter.Deserialize(stream);
                     }
 
-                    loadedData = JsonUtility.FromJson<object>(dataToLoad);
+                    loadedData = JsonConvert.DeserializeObject(dataToLoad, new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.All
+                    });
                     Debug.Log($"Read save data from {fullPath}");
                 }
                 catch (Exception e)

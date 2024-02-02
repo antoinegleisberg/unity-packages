@@ -12,7 +12,10 @@ namespace antoinegleisberg.SaveSystem
         [SerializeField] private string _uid = "";
         private static Dictionary<string, GuidHolder> _globalLookup = new Dictionary<string, GuidHolder>();
 
-        public string UniqueId => _uid;
+        public string UniqueId {
+            get { return _uid; }
+            set { _uid = value; }
+        }
 
         private void Awake()
         {

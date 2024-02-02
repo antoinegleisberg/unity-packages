@@ -1,119 +1,109 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using antoinegleisberg.Types;
 
 namespace antoinegleisberg.SaveSystem
 {
-    public class SaveSystem : MonoBehaviour
+    public static class SaveSystem
     {
-        public static SaveSystem Instance { get; private set; }
-
-        private SerializableDictionary<string, object> _gameState = new SerializableDictionary<string, object>();
-
-        private void Awake()
-        {
-            Instance = this;
-        }
-
-        public void LoadSave(string filePath)
+        public static void LoadSave(string filePath)
         {
             object gameData = FileDataHandler.LoadData(filePath);
 
-            _gameState = (SerializableDictionary<string, object>)gameData;
+            if (gameData == null)
+            {
+                // it is a new save
+                return;
+            }
 
-            LoadEntitiesState(FindObjectsOfType<SaveableEntity>().ToList());
+            LoadEntitiesState(Object.FindObjectsOfType<SaveableEntity>().ToList(), gameData);
         }
 
-        public void SaveGame(string filePath)
+        public static void SaveGame(string filePath)
         {
-            SaveEntitiesState(FindObjectsOfType<SaveableEntity>().ToList());
+            object gameState = SaveEntitiesState(Object.FindObjectsOfType<SaveableEntity>().ToList());
 
-            FileDataHandler.SaveData(filePath, _gameState);
+            FileDataHandler.SaveData(filePath, gameState);
         }
 
-        public void DeleteSaveFile(string filePath)
+        public static void DeleteSaveFile(string filePath)
         {
             FileDataHandler.DeleteFile(filePath);
         }
 
-        public void LoadScene(string sceneName)
+        public static void LoadScene(string sceneName, object entitiesState)
         {
             List<SaveableEntity> saveableEntities = FindSaveableEntitiesInScene(sceneName);
 
-            LoadEntitiesState(saveableEntities);
+            LoadEntitiesState(saveableEntities, entitiesState);
         }
 
-        public void SaveScene(string sceneName)
+        public static void LoadScene(string sceneName, string filePath)
+        {
+            object entitiesState = FileDataHandler.LoadData(filePath);
+            
+            LoadScene(sceneName, entitiesState);
+        }
+
+        public static object SaveScene(string sceneName)
         {
             List<SaveableEntity> saveableEntities = FindSaveableEntitiesInScene(sceneName);
 
-            SaveEntitiesState(saveableEntities);
+            object entitiesState = SaveEntitiesState(saveableEntities);
+
+            return entitiesState;
         }
 
-        private void LoadEntitiesState(List<SaveableEntity> saveableEntities)
+        public static void SaveScene(string sceneName, string filePath)
         {
+            object entitiesState = SaveScene(sceneName);
+
+            FileDataHandler.SaveData(filePath, entitiesState);
+        }
+
+        public static object LoadObject(string fileName)
+        {
+            return FileDataHandler.LoadData(fileName);
+        }
+
+        public static void SaveObject(string fileName, object data)
+        {
+            FileDataHandler.SaveData(fileName, data);
+        }
+
+        private static void LoadEntitiesState(List<SaveableEntity> saveableEntities, object entitiesState)
+        {
+            Dictionary<string, object> gameState = (Dictionary<string, object>)entitiesState;
+
             foreach (SaveableEntity saveableEntity in saveableEntities)
             {
-                //string sceneName = saveableEntity.gameObject.scene.name;
-                //string uid = saveableEntity.GetComponent<GuidHolder>().UniqueId;
-                //if (_gameState.ContainsKey(sceneName) && _gameState[sceneName].ContainsKey(uid))
-                //{
-                //    saveableEntity.LoadData(_gameState[sceneName][uid]);
-                //}
                 string uid = saveableEntity.GetComponent<GuidHolder>().UniqueId;
-                if (_gameState.ContainsKey(uid))
+                if (gameState.ContainsKey(uid))
                 {
-                    saveableEntity.LoadData(_gameState[uid]);
+                    saveableEntity.LoadData(gameState[uid]);
                 }
             }
         }
 
-        private void SaveEntitiesState(List<SaveableEntity> saveableEntities)
+        private static object SaveEntitiesState(List<SaveableEntity> saveableEntities)
         {
+            Dictionary<string, object> gameState = new Dictionary<string, object>();
+
             foreach (SaveableEntity saveableEntity in saveableEntities)
             {
-                //string sceneName = saveableEntity.gameObject.scene.name;
-                //string uid = saveableEntity.GetComponent<GuidHolder>().UniqueId;
-                //if (!_gameState.ContainsKey(sceneName))
-                //{
-                //    _gameState.Add(sceneName, new SerializableDictionary<string, object>());
-                //}
-                //_gameState[sceneName][uid] = saveableEntity.GetSaveData();
                 string uid = saveableEntity.GetComponent<GuidHolder>().UniqueId;
-                _gameState[uid] = saveableEntity.GetSaveData();
-                Debug.Log($"Saved data for {saveableEntity.name}: {_gameState[uid]}");
+                gameState[uid] = saveableEntity.GetSaveData();
             }
+
+            return gameState;
         }
 
-        //private void AddSaveableObjects(string sceneName)
-        //{
-        //    RemoveSaveableObjects(sceneName);
-        //    gameState.Add(sceneName, FindSaveableObjects(sceneName));
-        //}
-
-        //private void RemoveSaveableObjects(string sceneName)
-        //{
-        //    if (gameState.ContainsKey(sceneName))
-        //        gameState.Remove(sceneName);
-        //}
-
-        private List<SaveableEntity> FindSaveableEntitiesInScene(string sceneName)
+        private static List<SaveableEntity> FindSaveableEntitiesInScene(string sceneName)
         {
             List<SaveableEntity> saveables =
-                FindObjectsOfType<SaveableEntity>()
+                Object.FindObjectsOfType<SaveableEntity>()
                 .Where(x => x.gameObject.scene.name == sceneName)
                 .ToList();
-
-            //if (saveables.Count > 0)
-            //{
-            //    StringBuilder builder = new StringBuilder($"Found {saveables.Count} saveables in scene {sceneName}: ");
-            //    foreach (ISaveable saveableObject in saveables)
-            //    {
-            //        builder.AppendLine(saveableObject.ToString());
-            //    }
-            //    Debug.Log(builder.ToString());
-            //}
 
             return saveables;
         }
