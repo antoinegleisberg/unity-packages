@@ -16,6 +16,14 @@ namespace antoinegleisberg.SceneManagement
         {
             Instance = this;
             _loadedScenes = new HashSet<string>();
+            for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; ++i)
+            {
+                Scene scene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(i);
+                if (scene.isLoaded)
+                {
+                    _loadedScenes.Add(scene.name);
+                }
+            }
         }
 
         public void LoadScene(string sceneName, Action onSceneLoaded = null)

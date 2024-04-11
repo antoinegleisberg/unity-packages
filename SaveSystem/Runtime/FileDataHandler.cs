@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace antoinegleisberg.SaveSystem
+namespace antoinegleisberg.Saving
 {
     internal static class FileDataHandler
     {

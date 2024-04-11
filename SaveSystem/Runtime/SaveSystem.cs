@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace antoinegleisberg.SaveSystem
+namespace antoinegleisberg.Saving
 {
     public static class SaveSystem
     {

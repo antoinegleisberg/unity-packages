@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace antoinegleisberg.SaveSystem
+namespace antoinegleisberg.Saving
 {
     [RequireComponent(typeof(GuidHolder))]
     public class SaveableEntity : MonoBehaviour

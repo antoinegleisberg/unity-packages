@@ -1,6 +1,6 @@
 {
-    "name": "antoinegleisberg.SaveSystem",
-    "rootNamespace": "antoinegleisberg.SaveSystem",
+    "name": "antoinegleisberg.Saving",
+    "rootNamespace": "antoinegleisberg.Saving",
     "references": [
         "GUID:63dba531ccb02b54da80b6eee9559729"
     ],

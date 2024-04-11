@@ -1,4 +1,6 @@
 
+using System.Collections.Generic;
+
 namespace antoinegleisberg.Types
 {
     [System.Serializable]

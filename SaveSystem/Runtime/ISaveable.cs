@@ -1,5 +1,5 @@
 
-namespace antoinegleisberg.SaveSystem
+namespace antoinegleisberg.Saving
 {
     public interface ISaveable
     {

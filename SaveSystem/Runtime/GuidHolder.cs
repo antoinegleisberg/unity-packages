@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 
 
-namespace antoinegleisberg.SaveSystem
+namespace antoinegleisberg.Saving
 {
     [ExecuteAlways]
     public class GuidHolder : MonoBehaviour
