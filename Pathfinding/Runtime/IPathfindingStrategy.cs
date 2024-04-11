@@ -1,12 +1,11 @@
-
-
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace antoinegleisberg.Pathfinding
 {
-    internal interface IPathfindingStrategy
+    internal interface IPathfindingStrategy<TNode> where TNode : class
     {
-        public List<Node> FindPath(Node start, Node end);
+        public List<TNode> FindPath(TNode start, TNode end);
     }
 }

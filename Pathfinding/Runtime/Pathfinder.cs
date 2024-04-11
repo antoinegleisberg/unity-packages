@@ -6,25 +6,25 @@ using System.Collections.Generic;
 
 namespace antoinegleisberg.Pathfinding
 {
-    public class Pathfinder
+    public class Pathfinder<TNode> where TNode : class
     {
-        private IPathfindingStrategy _strategy;
+        private IPathfindingStrategy<TNode> _strategy;
 
-        private Pathfinder(IPathfindingStrategy strategy)
+        private Pathfinder(IPathfindingStrategy<TNode> strategy)
         {
             _strategy = strategy;
         }
 
-        public static Pathfinder GetAStarPathfinder(Func<Node, Node, int> heuristicDistance, Func<Node, List<Pair<Node, int>>> neighbours)
+        public static Pathfinder<TNode> GetAStarPathfinder(Func<TNode, TNode, int> heuristicDistance, Func<TNode, List<Pair<TNode, int>>> neighbours)
         {
-            AStar aStar = new AStar(heuristicDistance, neighbours);
+            AStar<TNode> aStar = new AStar<TNode>(heuristicDistance, neighbours);
 
-            Pathfinder pathfinder = new Pathfinder(aStar);
+            Pathfinder<TNode> pathfinder = new Pathfinder<TNode>(aStar);
 
             return pathfinder;
         }
 
-        public List<Node> FindPath(Node start, Node end)
+        public List<TNode> FindPath(TNode start, TNode end)
         {
             return _strategy.FindPath(start, end);
         }

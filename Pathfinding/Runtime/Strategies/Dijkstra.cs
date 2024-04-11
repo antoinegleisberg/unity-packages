@@ -4,16 +4,16 @@ using System.Collections.Generic;
 
 namespace antoinegleisberg.Pathfinding
 {
-    internal class Dijkstra : IPathfindingStrategy
+    internal class Dijkstra<TNode> : IPathfindingStrategy<TNode> where TNode : class
     {
-        private Func<Node, List<Pair<Node, int>>> _neighbours;
+        private Func<TNode, List<Pair<TNode, int>>> _neighbours;
 
-        public Dijkstra(Func<Node, List<Pair<Node, int>>> neighbours)
+        public Dijkstra(Func<TNode, List<Pair<TNode, int>>> neighbours)
         {
             _neighbours = neighbours;
         }
 
-        public List<Node> FindPath(Node start, Node end)
+        public List<TNode> FindPath(TNode start, TNode end)
         {
             throw new NotImplementedException();
         }

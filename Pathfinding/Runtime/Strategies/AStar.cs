@@ -1,36 +1,39 @@
-
-
 using antoinegleisberg.Types;
 using System;
 using System.Collections.Generic;
 
 namespace antoinegleisberg.Pathfinding
 {
-    internal class AStar : IPathfindingStrategy
+    internal class AStar<TNode> : IPathfindingStrategy<TNode> where TNode : class
     {
-        private Dictionary<Node, int> _gScore; // cost to reach that node
-        private Dictionary<Node, int> _fScore; // g + h
-        private Dictionary<Node, int> _hScore; // heuristic distance to end
-        private Dictionary<Node, Node> _parents;
+        private Dictionary<TNode, int> _gScore; // cost to reach that TNode
+        private Dictionary<TNode, int> _fScore; // g + h
+        private Dictionary<TNode, int> _hScore; // heuristic distance to end
+        private Dictionary<TNode, TNode> _parents;
         
-        private Func<Node, Node, int> _heuristicDistance;
-        private Func<Node, List<Pair<Node, int>>> _neighboursDistances; // For each neighbour, the distance to it
+        private Func<TNode, TNode, int> _heuristicDistance;
+        private Func<TNode, List<Pair<TNode, int>>> _neighboursDistances; // For each neighbour, the distance to it
 
-        public AStar(Func<Node, Node, int> heuristicDistance, Func<Node, List<Pair<Node, int>>> neighbours)
+        public AStar(Func<TNode, TNode, int> heuristicDistance, Func<TNode, List<Pair<TNode, int>>> neighbours)
         {
             _heuristicDistance = heuristicDistance;
             _neighboursDistances = neighbours;
+
+            _gScore = new Dictionary<TNode, int>();
+            _fScore = new Dictionary<TNode, int>();
+            _hScore = new Dictionary<TNode, int>();
+            _parents = new Dictionary<TNode, TNode>();
         }
 
-        public List<Node> FindPath(Node start, Node end)
+        public List<TNode> FindPath(TNode start, TNode end)
         {
-            List<Node> openList = new List<Node>();
-            HashSet<Node> closedSet = new HashSet<Node>();
+            List<TNode> openList = new List<TNode>();
+            HashSet<TNode> closedSet = new HashSet<TNode>();
 
-            _gScore = new Dictionary<Node, int>();
-            _fScore = new Dictionary<Node, int>();
-            _hScore = new Dictionary<Node, int>();
-            _parents = new Dictionary<Node, Node>();
+            _gScore.Clear();
+            _fScore.Clear();
+            _hScore.Clear();
+            _parents.Clear();
 
             _gScore.Add(start, 0);
             _hScore.Add(start, _heuristicDistance(start, end));
@@ -41,7 +44,7 @@ namespace antoinegleisberg.Pathfinding
 
             while (openList.Count > 0)
             {
-                Node currentNode = GetLowestCostNode(openList);
+                TNode currentNode = GetLowestCostNode(openList);
 
                 if (currentNode == end)
                 {
@@ -51,9 +54,9 @@ namespace antoinegleisberg.Pathfinding
                 openList.Remove(currentNode);
                 closedSet.Add(currentNode);
 
-                foreach (Pair<Node, int> neighbourDistancePair in _neighboursDistances(currentNode))
+                foreach (Pair<TNode, int> neighbourDistancePair in _neighboursDistances(currentNode))
                 {
-                    Node neighbour = neighbourDistancePair.First;
+                    TNode neighbour = neighbourDistancePair.First;
                     int distance = neighbourDistancePair.Second;
 
                     if (closedSet.Contains(neighbour))
@@ -82,7 +85,7 @@ namespace antoinegleisberg.Pathfinding
             return null;
         }
 
-        private void UpdateCosts(Node currentNode, Node neighbour, int distance, Node end)
+        private void UpdateCosts(TNode currentNode, TNode neighbour, int distance, TNode end)
         {
             int potentialNewGCost = _gScore[currentNode] + distance;
 
@@ -95,10 +98,10 @@ namespace antoinegleisberg.Pathfinding
         }
         
 
-        private List<Node> CalculatePath(Node end)
+        private List<TNode> CalculatePath(TNode end)
         {
-            List<Node> path = new List<Node>();
-            Node currentNode = end;
+            List<TNode> path = new List<TNode>();
+            TNode currentNode = end;
             while (_parents[currentNode] != null)
             {
                 path.Insert(0, currentNode);
@@ -108,21 +111,21 @@ namespace antoinegleisberg.Pathfinding
             return path;
         }
 
-        private Node GetLowestCostNode(List<Node> openList)
+        private TNode GetLowestCostNode(List<TNode> openList)
         {
-            Node lowestNode = openList[0];
-            foreach (Node node in openList)
+            TNode lowestNode = openList[0];
+            foreach (TNode TNode in openList)
             {
-                if (_fScore[node] < _fScore[lowestNode])
+                if (_fScore[TNode] < _fScore[lowestNode])
                 {
-                    lowestNode = node;
+                    lowestNode = TNode;
                 }
 
-                else if (_fScore[node] == _fScore[lowestNode])
+                else if (_fScore[TNode] == _fScore[lowestNode])
                 {
-                    if (_hScore[node] < _hScore[lowestNode])
+                    if (_hScore[TNode] < _hScore[lowestNode])
                     {
-                        lowestNode = node;
+                        lowestNode = TNode;
                     }
                 }
             }
