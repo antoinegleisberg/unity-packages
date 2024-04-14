@@ -6,7 +6,7 @@ namespace antoinegleisberg.Types
 {
     public static class MethodExtensions
     {
-        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this List<Pair<TKey, TValue>> pairs)
+        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IReadOnlyList<Pair<TKey, TValue>> pairs)
         {
             Dictionary<TKey, TValue> dict = new Dictionary<TKey, TValue>();
             
@@ -18,7 +18,7 @@ namespace antoinegleisberg.Types
             return dict;
         }
 
-        public static Dictionary<TKey, int> Merge<TKey>(this Dictionary<TKey, int> dict1, Dictionary<TKey, int> dict2)
+        public static Dictionary<TKey, int> Merge<TKey>(this IReadOnlyDictionary<TKey, int> dict1, IReadOnlyDictionary<TKey, int> dict2)
         {
             Dictionary<TKey, int> dict = new Dictionary<TKey, int>(dict1);
 

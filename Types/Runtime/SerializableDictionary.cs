@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +9,17 @@ namespace antoinegleisberg.Types
     {
         [SerializeField] private List<TKey> _keys = new List<TKey>();
         [SerializeField] private List<TValue> _values = new List<TValue>();
+
+        public SerializableDictionary() { }
+
+        public SerializableDictionary(Dictionary<TKey, TValue> dict)
+        {
+            foreach (KeyValuePair<TKey, TValue> pair in dict)
+            {
+                _keys.Add(pair.Key);
+                _values.Add(pair.Value);
+            }
+        }
 
         public static SerializableDictionary<TKey, TValue> FromDictionary(Dictionary<TKey, TValue> dict)
         {
