@@ -17,5 +17,10 @@ namespace antoinegleisberg.Pathfinding
         {
             throw new NotImplementedException();
         }
+
+        public List<TNode> FindPath(List<TNode> startNodes, List<TNode> endNodes)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

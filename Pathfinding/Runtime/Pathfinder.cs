@@ -28,5 +28,10 @@ namespace antoinegleisberg.Pathfinding
         {
             return _strategy.FindPath(start, end);
         }
+
+        public List<TNode> FindPath(List<TNode> startNodes, List<TNode> endNodes)
+        {
+            return _strategy.FindPath(startNodes, endNodes);
+        }
     }
 }

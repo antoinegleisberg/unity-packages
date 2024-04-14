@@ -11,12 +11,12 @@ namespace antoinegleisberg.Pathfinding
         private Dictionary<TNode, int> _hScore; // heuristic distance to end
         private Dictionary<TNode, TNode> _parents;
         
-        private Func<TNode, TNode, int> _heuristicDistance;
+        private Func<TNode, List<TNode>, int> _heuristicDistance;
         private Func<TNode, List<Pair<TNode, int>>> _neighboursDistances; // For each neighbour, the distance to it
 
         public AStar(Func<TNode, TNode, int> heuristicDistance, Func<TNode, List<Pair<TNode, int>>> neighbours)
         {
-            _heuristicDistance = heuristicDistance;
+            _heuristicDistance = ConvertHeuristicDistance(heuristicDistance);
             _neighboursDistances = neighbours;
 
             _gScore = new Dictionary<TNode, int>();
@@ -27,6 +27,12 @@ namespace antoinegleisberg.Pathfinding
 
         public List<TNode> FindPath(TNode start, TNode end)
         {
+            return FindPath(new List<TNode>() { start }, new List<TNode>() { end });
+        }
+
+        public List<TNode> FindPath(List<TNode> startNodes, List<TNode> endNodes)
+        {
+            // ToDo: implement priority queue to optimise this
             List<TNode> openList = new List<TNode>();
             HashSet<TNode> closedSet = new HashSet<TNode>();
 
@@ -35,20 +41,23 @@ namespace antoinegleisberg.Pathfinding
             _hScore.Clear();
             _parents.Clear();
 
-            _gScore.Add(start, 0);
-            _hScore.Add(start, _heuristicDistance(start, end));
-            _fScore.Add(start, _gScore[start] + _hScore[start]);
-            _parents.Add(start, null);
+            foreach (TNode startNode in startNodes)
+            {
+                _gScore.Add(startNode, 0);
+                _hScore.Add(startNode, _heuristicDistance(startNode, endNodes));
+                _fScore.Add(startNode, _gScore[startNode] + _hScore[startNode]);
+                _parents.Add(startNode, null);
 
-            openList.Add(start);
+                openList.Add(startNode);
+            }
 
             while (openList.Count > 0)
             {
                 TNode currentNode = GetLowestCostNode(openList);
 
-                if (currentNode == end)
+                if (endNodes.Contains(currentNode))
                 {
-                    return CalculatePath(end);
+                    return CalculatePath(currentNode);
                 }
 
                 openList.Remove(currentNode);
@@ -68,11 +77,11 @@ namespace antoinegleisberg.Pathfinding
                     {
                         _parents[neighbour] = currentNode;
                         _gScore[neighbour] = int.MaxValue;
-                        _hScore[neighbour] = _heuristicDistance(neighbour, end);
+                        _hScore[neighbour] = _heuristicDistance(neighbour, endNodes);
                         _fScore[neighbour] = int.MaxValue;
                     }
 
-                    UpdateCosts(currentNode, neighbour, distance, end);
+                    UpdateCosts(currentNode, neighbour, distance);
 
                     if (!openList.Contains(neighbour))
                     {
@@ -85,7 +94,7 @@ namespace antoinegleisberg.Pathfinding
             return null;
         }
 
-        private void UpdateCosts(TNode currentNode, TNode neighbour, int distance, TNode end)
+        private void UpdateCosts(TNode currentNode, TNode neighbour, int distance)
         {
             int potentialNewGCost = _gScore[currentNode] + distance;
 
@@ -114,22 +123,41 @@ namespace antoinegleisberg.Pathfinding
         private TNode GetLowestCostNode(List<TNode> openList)
         {
             TNode lowestNode = openList[0];
-            foreach (TNode TNode in openList)
+            foreach (TNode node in openList)
             {
-                if (_fScore[TNode] < _fScore[lowestNode])
+                if (_fScore[node] < _fScore[lowestNode])
                 {
-                    lowestNode = TNode;
+                    lowestNode = node;
                 }
 
-                else if (_fScore[TNode] == _fScore[lowestNode])
+                else if (_fScore[node] == _fScore[lowestNode])
                 {
-                    if (_hScore[TNode] < _hScore[lowestNode])
+                    if (_hScore[node] < _hScore[lowestNode])
                     {
-                        lowestNode = TNode;
+                        lowestNode = node;
                     }
                 }
             }
             return lowestNode;
+        }
+
+        private static Func<TNode, List<TNode>, int> ConvertHeuristicDistance(Func<TNode, TNode, int> heuristicDistance)
+        {
+            Func<TNode, List<TNode>, int> heuristicFunction = (node, endNodes) =>
+            {
+                int minDistance = int.MaxValue;
+                foreach (TNode endNode in endNodes)
+                {
+                    int distance = heuristicDistance(node, endNode);
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                    }
+                }
+                return minDistance;
+            };
+
+            return heuristicFunction;
         }
     }
 }
