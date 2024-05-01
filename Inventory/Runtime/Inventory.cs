@@ -99,9 +99,9 @@ namespace antoinegleisberg.Inventory
             return _items.Count == 0;
         }
 
-        public Dictionary<T, int> Items()
+        public IReadOnlyDictionary<T, int> Items()
         {
-            return new Dictionary<T, int>(_items);
+            return _items;
         }
 
         public bool ContainsItems(Dictionary<T, int> items)

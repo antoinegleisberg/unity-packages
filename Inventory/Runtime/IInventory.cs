@@ -24,6 +24,6 @@ namespace antoinegleisberg.Inventory
 
         public bool IsEmpty();
         
-        public Dictionary<T, int> Items();
+        public IReadOnlyDictionary<T, int> Items();
     }
 }
