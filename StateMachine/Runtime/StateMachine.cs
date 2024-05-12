@@ -39,6 +39,7 @@ namespace antoinegleisberg.StateMachine
             _stateStack.Pop();
             _stateStack.Peek().EnterState(_parentObject);
         }
+        
         private IEnumerator Start()
         {
             yield return null;

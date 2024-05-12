@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 
 
 namespace antoinegleisberg.Animation
 {
-    [System.Serializable]
+    [Serializable]
     public struct AnimationFrame
     {
         public Sprite Sprite;

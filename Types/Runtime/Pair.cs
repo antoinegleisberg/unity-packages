@@ -1,9 +1,8 @@
-
-using System.Collections.Generic;
+using System;
 
 namespace antoinegleisberg.Types
 {
-    [System.Serializable]
+    [Serializable]
     public struct Pair<T1, T2>
     {
         public T1 First;

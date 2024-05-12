@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace antoinegleisberg.Types
@@ -60,23 +62,99 @@ namespace antoinegleisberg.Types
             return result;
         }
 
-        public static Vector3 ClosestTo(this List<Vector3> vectors, Vector3 target)
+        public static Vector3 ClosestTo(this IEnumerable<Vector3> vectors, Vector3 target)
         {
-            Vector3 closest = vectors[0];
-            float closestDistance = Vector3.Distance(vectors[0], target);
-
-            for (int i = 1; i < vectors.Count; i++)
+            if (vectors.Count() == 0)
             {
-                float distance = Vector3.Distance(vectors[i], target);
+                throw new ArgumentException("Cannot find the closest vector to a target in an empty list of vectors");
+            }
+
+            Vector3 closest = vectors.First();
+            float closestDistance = Vector3.Distance(closest, target);
+
+            foreach (Vector3 vector in vectors)
+            {
+                float distance = Vector3.Distance(vector, target);
 
                 if (distance < closestDistance)
                 {
-                    closest = vectors[i];
+                    closest = vector;
                     closestDistance = distance;
                 }
             }
 
             return closest;
+        }
+
+        public static int IndexOf<T>(this IReadOnlyList<T> list, T item)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i].Equals(item))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            Comparer<TKey> comparer = Comparer<TKey>.Default;
+            TSource maxItem = default(TSource);
+            TKey maxValue = default(TKey);
+            bool hasValue = false;
+
+            foreach (var item in source)
+            {
+                TKey value = selector(item);
+                if (!hasValue || comparer.Compare(value, maxValue) > 0)
+                {
+                    maxItem = item;
+                    maxValue = value;
+                    hasValue = true;
+                }
+            }
+
+            if (!hasValue)
+                throw new InvalidOperationException("Sequence contains no elements");
+
+            return maxItem;
+        }
+
+        public static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            Comparer<TKey> comparer = Comparer<TKey>.Default;
+            TSource minItem = default(TSource);
+            TKey minValue = default(TKey);
+            bool hasValue = false;
+
+            foreach (var item in source)
+            {
+                TKey value = selector(item);
+                if (!hasValue || comparer.Compare(value, minValue) < 0)
+                {
+                    minItem = item;
+                    minValue = value;
+                    hasValue = true;
+                }
+            }
+
+            if (!hasValue)
+                throw new InvalidOperationException("Sequence contains no elements");
+
+            return minItem;
         }
     }
 }

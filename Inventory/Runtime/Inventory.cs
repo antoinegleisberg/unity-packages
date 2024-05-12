@@ -108,6 +108,10 @@ namespace antoinegleisberg.Inventory
         {
             foreach (KeyValuePair<T, int> item in items)
             {
+                if (item.Value <= 0)
+                {
+                    continue;
+                }
                 if (!_items.ContainsKey(item.Key) || GetItemCount(item.Key) < item.Value)
                 {
                     return false;
@@ -126,6 +130,10 @@ namespace antoinegleisberg.Inventory
             List<T> itemsToRemove = new List<T>();
             foreach (T item in items.Keys)
             {
+                if (items[item] <= 0)
+                {
+                    continue;
+                }
                 _items[item] -= items[item];
                 if (_items[item] == 0)
                 {

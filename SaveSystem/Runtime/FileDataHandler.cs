@@ -28,10 +28,6 @@ namespace antoinegleisberg.Saving
                     {
                         writer.Write(dataToStore);
                     }
-
-                    // or 
-                    // BinaryFormatter binaryFormatter = new BinaryFormatter();
-                    // binaryFormatter.Serialize(stream, data);
                 }
                 Debug.Log($"Save data to {fullPath}");
             }
@@ -57,10 +53,6 @@ namespace antoinegleisberg.Saving
                         {
                             dataToLoad = reader.ReadToEnd();
                         }
-                        
-                        // or
-                        // BinaryFormatter binaryFormatter = new BinaryFormatter();
-                        // loadedData = binaryFormatter.Deserialize(stream);
                     }
 
                     loadedData = JsonConvert.DeserializeObject(dataToLoad, new JsonSerializerSettings

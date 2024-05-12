@@ -10,10 +10,13 @@ namespace antoinegleisberg.Inventory
         public class Builder
         {
             private int _maxCapacity = -1;
-            private int _maxSlots = -1;
             private Func<T, int> _itemSizes = null;
+            
+            private int _maxSlots = -1;
             private Func<T, int> _maxSlotSize = null;
+
             private Dictionary<T, int> _itemCapacities = null;
+            
             private Dictionary<T, int> _items = null;
 
             public Builder() { }
