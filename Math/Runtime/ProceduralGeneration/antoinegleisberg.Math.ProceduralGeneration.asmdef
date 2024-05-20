@@ -1,0 +1,16 @@
+{
+    "name": "antoinegleisberg.Math.ProceduralGeneration",
+    "rootNamespace": "antoinegleisberg.Math.ProceduralGeneration",
+    "references": [
+        "GUID:9e231bd6491211440b930c6a47b0e255"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
