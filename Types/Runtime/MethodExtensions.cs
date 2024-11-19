@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
-
-using Vector3 = UnityEngine.Vector3;
+using UnityEngine;
 
 namespace antoinegleisberg.Types
 {
@@ -157,6 +155,19 @@ namespace antoinegleisberg.Types
                 throw new InvalidOperationException("Sequence contains no elements");
 
             return minItem;
+        }
+
+        public static Vector3Int ToVector3Int(this Vector2Int vector)
+        {
+            return new Vector3Int(vector.x, vector.y, 0);
+        }
+
+        public static void DestroyChildren(this Transform transform)
+        {
+            foreach (Transform child in transform)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
         }
     }
 }

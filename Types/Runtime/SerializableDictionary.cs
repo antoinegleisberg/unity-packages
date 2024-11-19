@@ -1,10 +1,11 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 
 namespace antoinegleisberg.Types
 {
-    [System.Serializable]
+    [Serializable]
     public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
     {
         [SerializeField] private List<TKey> _keys = new List<TKey>();
@@ -12,7 +13,7 @@ namespace antoinegleisberg.Types
 
         public SerializableDictionary() { }
 
-        public SerializableDictionary(Dictionary<TKey, TValue> dict)
+        public SerializableDictionary(IReadOnlyDictionary<TKey, TValue> dict)
         {
             foreach (KeyValuePair<TKey, TValue> pair in dict)
             {
@@ -21,7 +22,7 @@ namespace antoinegleisberg.Types
             }
         }
 
-        public static SerializableDictionary<TKey, TValue> FromDictionary(Dictionary<TKey, TValue> dict)
+        public static SerializableDictionary<TKey, TValue> FromDictionary(IReadOnlyDictionary<TKey, TValue> dict)
         {
             SerializableDictionary<TKey, TValue> serializableDictionary = new SerializableDictionary<TKey, TValue>();
             foreach (KeyValuePair<TKey, TValue> pair in dict)
