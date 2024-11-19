@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
-namespace antoinegleisberg.HOA.Core
+namespace antoinegleisberg.Math.ProceduralGeneration
 {
     public class SimplexNoiseDemo : MonoBehaviour
     {
@@ -47,7 +47,7 @@ namespace antoinegleisberg.HOA.Core
                         // float z = simplexNoise.CalculateNd(new List<float>() { 0.2f * x * _scale, 0.2f * y * _scale });
                         float z = layeredSimplexNoise.Generate(
                             new List<float>() { 0.2f * x * _scale, 0.2f * y * _scale, time },
-                            new List<float>() { offset.x, offset.y, 0 }, _octaves, _amplitude, _persistence, _frequency);
+                            _octaves, _amplitude, _persistence, _frequency, new List<float>() { offset.x, offset.y, 0 });
                         values2D[x, y] = z;
                     }
                 }

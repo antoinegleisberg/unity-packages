@@ -7,7 +7,7 @@ using Vector2 = System.Numerics.Vector2;
 using Random = System.Random;
 using Debug = UnityEngine.Debug;
 
-namespace antoinegleisberg.HOA.Core
+namespace antoinegleisberg.Math.ProceduralGeneration
 {
     public class BaseSimplexNoise
     {
