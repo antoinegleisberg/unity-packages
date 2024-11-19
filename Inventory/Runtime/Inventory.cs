@@ -12,13 +12,13 @@ namespace antoinegleisberg.Inventory
         private int _maxSlots;
         private Func<T, int> _itemSizes;
         private Func<T, int> _slotSizes;
-        private Dictionary<T, int> _itemCapacities;
+        private IReadOnlyDictionary<T, int> _itemCapacities;
 
         private Dictionary<T, int> _items;
 
         private Inventory() { }
 
-        private Inventory(int maxCapacity, int maxSlots, Func<T, int> itemSizes, Func<T, int> slotSizes, Dictionary<T, int> itemCapacities, Dictionary<T, int> items) 
+        private Inventory(int maxCapacity, int maxSlots, Func<T, int> itemSizes, Func<T, int> slotSizes, IReadOnlyDictionary<T, int> itemCapacities, IReadOnlyDictionary<T, int> items) 
         {
             _maxCapacity = maxCapacity;
             _maxSlots = maxSlots;
@@ -34,7 +34,7 @@ namespace antoinegleisberg.Inventory
             }
         }
 
-        public void AddItems(Dictionary<T, int> items)
+        public void AddItems(IReadOnlyDictionary<T, int> items)
         {
             if (!CanAddItems(items))
             {
@@ -47,7 +47,7 @@ namespace antoinegleisberg.Inventory
             }
         }
 
-        public bool CanAddItems(Dictionary<T, int> items)
+        public bool CanAddItems(IReadOnlyDictionary<T, int> items)
         {
             if (_maxCapacity >= 0)
             {
@@ -104,7 +104,7 @@ namespace antoinegleisberg.Inventory
             return _items;
         }
 
-        public bool ContainsItems(Dictionary<T, int> items)
+        public bool ContainsItems(IReadOnlyDictionary<T, int> items)
         {
             foreach (KeyValuePair<T, int> item in items)
             {
@@ -120,7 +120,7 @@ namespace antoinegleisberg.Inventory
             return true;
         }
 
-        public void RemoveItems(Dictionary<T, int> items)
+        public void RemoveItems(IReadOnlyDictionary<T, int> items)
         {
             if (!ContainsItems(items))
             {
@@ -146,7 +146,7 @@ namespace antoinegleisberg.Inventory
             }
         }
 
-        private int CalculateCapacity(Dictionary<T, int> items)
+        private int CalculateCapacity(IReadOnlyDictionary<T, int> items)
         {
             int capacity = 0;
             foreach (T item in items.Keys)
@@ -156,7 +156,7 @@ namespace antoinegleisberg.Inventory
             return capacity;
         }
 
-        private int CalculateNumberOfSlots(Dictionary<T, int> items)
+        private int CalculateNumberOfSlots(IReadOnlyDictionary<T, int> items)
         {
             if (_slotSizes == null)
             {

@@ -15,9 +15,9 @@ namespace antoinegleisberg.Inventory
             private int _maxSlots = -1;
             private Func<T, int> _maxSlotSize = null;
 
-            private Dictionary<T, int> _itemCapacities = null;
+            private IReadOnlyDictionary<T, int> _itemCapacities = null;
             
-            private Dictionary<T, int> _items = null;
+            private IReadOnlyDictionary<T, int> _items = null;
 
             public Builder() { }
 
@@ -81,7 +81,7 @@ namespace antoinegleisberg.Inventory
             /// </summary>
             /// <param name="itemCapacities"></param>
             /// <returns></returns>
-            public Builder WithPredeterminedItemSet(Dictionary<T, int> itemCapacities)
+            public Builder WithPredeterminedItemSet(IReadOnlyDictionary<T, int> itemCapacities)
             {
                 if (itemCapacities == null)
                 {
@@ -97,7 +97,7 @@ namespace antoinegleisberg.Inventory
             /// </summary>
             /// <param name="items"></param>
             /// <returns></returns>
-            public Builder WithItems(Dictionary<T, int> items)
+            public Builder WithItems(IReadOnlyDictionary<T, int> items)
             {
                 if (items == null)
                 {
