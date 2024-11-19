@@ -10,7 +10,7 @@ namespace antoinegleisberg.SceneManagement
 
         [SerializeField] private string _sceneName = "";
 
-        public string SceneName { get { return _sceneName; } }
+        public string SceneName => _sceneName;
 
         public static implicit operator string(SceneField sceneSerializer)
         {
