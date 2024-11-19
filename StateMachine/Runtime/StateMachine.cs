@@ -18,6 +18,11 @@ namespace antoinegleisberg.StateMachine
             _parentObject.StartCoroutine(Start());
         }
 
+        public BaseState<T> GetCurrentState()
+        {
+            return _stateStack.Peek();
+        }
+
         public void PushState(BaseState<T> newState)
         {
             _stateStack.Peek().ExitState(_parentObject);
