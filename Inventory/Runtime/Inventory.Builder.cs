@@ -19,7 +19,7 @@ namespace antoinegleisberg.Inventory
             
             private IReadOnlyDictionary<T, int> _items = null;
 
-            public Builder() { }
+            internal Builder() { }
 
             /// <summary>
             /// Adds a capacity limit to the inventory

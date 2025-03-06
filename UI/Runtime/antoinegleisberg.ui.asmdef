@@ -3,7 +3,8 @@
     "rootNamespace": "antoinegleisberg.UI",
     "references": [
         "GUID:9e231bd6491211440b930c6a47b0e255",
-        "GUID:30452e600233c54418ebbc7283dff525"
+        "GUID:30452e600233c54418ebbc7283dff525",
+        "GUID:150a9dc9db5bf5f49aad08b824212ad5"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

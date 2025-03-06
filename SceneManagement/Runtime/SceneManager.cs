@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -26,14 +27,14 @@ namespace antoinegleisberg.SceneManagement
             }
         }
 
-        public void LoadScene(string sceneName, Action onSceneLoaded = null)
+        public void LoadScene(string sceneName, Action onSceneLoaded = null, Action<float> onLoadingProgress = null)
         {
-            LoadScenes(new List<string>() { sceneName }, onSceneLoaded);
+            LoadScenes(new List<string>() { sceneName }, onSceneLoaded, onLoadingProgress);
         }
 
-        public void LoadScenes(List<string> scenes, Action onScenesLoaded = null)
+        public void LoadScenes(List<string> scenes, Action onScenesLoaded = null, Action<float> onLoadingProgress = null)
         {
-            StartCoroutine(LoadScenesCoroutine(scenes, onScenesLoaded));
+            StartCoroutine(LoadScenesCoroutine(scenes, onScenesLoaded, onLoadingProgress));
         }
 
         public void UnloadScenes(string sceneName, Action onSceneUnloaded = null)
@@ -46,7 +47,7 @@ namespace antoinegleisberg.SceneManagement
             StartCoroutine(UnloadScenesCoroutine(scenes, onScenesUnloaded));
         }
 
-        private IEnumerator LoadScenesCoroutine(List<string> scenes, Action onScenesLoaded)
+        private IEnumerator LoadScenesCoroutine(List<string> scenes, Action onScenesLoaded, Action<float> onLoadingProgress)
         {
             List<AsyncOperation> loadingOperations = new List<AsyncOperation>();
 
@@ -60,9 +61,30 @@ namespace antoinegleisberg.SceneManagement
                 loadingOperations.Add(LoadSceneAsync(sceneName));
             }
 
-            foreach (AsyncOperation loadingOperation in loadingOperations)
+            if (loadingOperations.Count == 0)
             {
-                yield return new WaitUntil(() => loadingOperation.isDone);
+                onScenesLoaded?.Invoke();
+                yield break;
+            }
+
+            bool loadingDone = false;
+            while (!loadingDone)
+            {
+                float averageProgress = loadingOperations.Select(operation => operation.progress).Average();
+                foreach (AsyncOperation loadingOperation in loadingOperations)
+                {
+                    loadingDone = true;
+                    if (!loadingOperation.isDone)
+                    {
+                        loadingDone = false;
+                    }
+                    if (loadingDone)
+                    {
+                        averageProgress = 1f;
+                    }
+                }
+                onLoadingProgress?.Invoke(averageProgress);
+                yield return null;
             }
 
             onScenesLoaded?.Invoke();
