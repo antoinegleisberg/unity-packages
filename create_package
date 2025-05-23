@@ -1,0 +1,107 @@
+#!/bin/bash
+
+# Usage: ./create_package.sh NewPackageName
+
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 NewPackageName"
+    exit 1
+fi
+
+SRC="_examplePackage"
+DEST="$1"
+
+if [ ! -d "$SRC" ]; then
+    echo "Source folder '$SRC' does not exist."
+    exit 2
+fi
+
+if [ -d "$DEST" ]; then
+    echo "Destination folder '$DEST' already exists."
+    exit 3
+fi
+
+# Copy the folder
+cp -r "$SRC" "$DEST"
+
+# Replace package.json with custom content
+cat > "$DEST/package.json" <<EOF
+{
+    "name": "com.antoinegleisberg.${DEST,,}",
+    "version": "1.0.0",
+    "displayName": "Antoine $DEST"
+}
+EOF
+
+cat > "$DEST/Editor/antoinegleisberg.$DEST.Editor.asmdef" <<EOF
+{
+    "name": "antoinegleisberg.$DEST.Editor",
+    "rootNamespace": "antoinegleisberg.$DEST.Editor",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
+EOF
+rm -f "$DEST/Editor/antoinegleisberg.package-name.Editor.asmdef"
+
+cat > "$DEST/Runtime/antoinegleisberg.$DEST.asmdef" <<EOF
+{
+    "name": "antoinegleisberg.$DEST",
+    "rootNamespace": "antoinegleisberg.$DEST",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
+EOF
+rm -f "$DEST/Runtime/antoinegleisberg.package-name.asmdef"
+
+cat > "$DEST/Tests/Runtime/antoinegleisberg.$DEST.Tests.asmdef" <<EOF
+{
+    "name": "antoinegleisberg.$DEST.Tests",
+    "rootNamespace": "antoinegleisberg.$DEST.Tests",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
+EOF
+rm -f "$DEST/Tests/Runtime/antoinegleisberg.package-name.Tests.asmdef"
+
+cat > "$DEST/Tests/Editor/antoinegleisberg.$DEST.Editor.Tests.asmdef" <<EOF
+{
+    "name": "antoinegleisberg.$DEST.Editor.Tests",
+    "rootNamespace": "antoinegleisberg.$DEST.Editor.Tests",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
+EOF
+rm -f "$DEST/Tests/Editor/antoinegleisberg.package-name.Editor.Tests.asmdef"
+
+echo "Package '$DEST' created successfully."
