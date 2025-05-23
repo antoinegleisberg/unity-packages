@@ -1,4 +1,5 @@
 using antoinegleisberg.Animation;
+using antoinegleisberg.HOA.UI.ColorSetters;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -14,11 +15,12 @@ namespace antoinegleisberg.UI
         [SerializeField] private float _toggleOnPosition;
         [SerializeField] private float _toggleSwitchDuration;
 
+        [SerializeField] private ScriptableColor _colorOn;
+        [SerializeField] private ScriptableColor _colorOff;
+
         public Action<bool> OnToggleSwitch;
 
-        public bool TogglePosition => _togglePosition;
-
-        private bool _togglePosition;
+        public bool TogglePosition { get; private set; }
             
         private void Awake()
         {
@@ -30,21 +32,46 @@ namespace antoinegleisberg.UI
             _toggleContainer.onClick.RemoveListener(() => OnToggleSwitched());
         }
 
-        private void OnToggleSwitched()
+        public void SetValue(bool value)
         {
-            StartCoroutine(SwitchToggleAnimation());
-            _togglePosition = !_togglePosition;
-            OnToggleSwitch?.Invoke(_togglePosition);
+            TogglePosition = value;
+            RectTransform rt = _toggleIndicator.GetComponent<RectTransform>();
+            Vector3 end = rt.anchoredPosition;
+            end.x = value ? _toggleOnPosition : _toggleOffPosition;
+            rt.anchoredPosition = end;
+            SwitchIndicatorColor();
         }
 
-        private IEnumerator SwitchToggleAnimation()
+        private void OnToggleSwitched()
+        {
+            StartCoroutine(SwitchToggleAnimation(_toggleSwitchDuration));
+            TogglePosition = !TogglePosition;
+            SwitchIndicatorColor();
+            OnToggleSwitch?.Invoke(TogglePosition);
+        }
+
+        private IEnumerator SwitchToggleAnimation(float duration)
         {
             RectTransform rt = _toggleIndicator.GetComponent<RectTransform>();
             Vector3 start = rt.anchoredPosition;
             Vector3 end = rt.anchoredPosition;
-            start.x = _togglePosition ? _toggleOnPosition : _toggleOffPosition;
-            end.x = _togglePosition ? _toggleOffPosition : _toggleOnPosition;
-            yield return StartCoroutine(rt.Slide(start, end, _toggleSwitchDuration));
+            start.x = TogglePosition ? _toggleOnPosition : _toggleOffPosition;
+            end.x = TogglePosition ? _toggleOffPosition : _toggleOnPosition;
+            yield return StartCoroutine(rt.Slide(start, end, duration));
+        }
+
+        private void SwitchIndicatorColor()
+        {
+            ScriptableColor targetColor;
+            if (TogglePosition)
+            {
+                targetColor = _colorOn;
+            }
+            else
+            {
+                targetColor = _colorOff;
+            }
+            _toggleIndicator.GetComponent<ImageColorSetter>().ChangeColor(targetColor);
         }
     }
 }

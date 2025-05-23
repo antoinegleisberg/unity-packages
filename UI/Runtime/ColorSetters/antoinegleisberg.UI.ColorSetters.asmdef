@@ -1,11 +1,8 @@
 {
-    "name": "antoinegleisberg.UI",
-    "rootNamespace": "antoinegleisberg.UI",
+    "name": "antoinegleisberg.UI.ColorSetters",
+    "rootNamespace": "antoinegleisberg.UI.ColorSetters",
     "references": [
-        "GUID:2f52124188519c9479593232eca95b2c",
-        "GUID:9e231bd6491211440b930c6a47b0e255",
-        "GUID:30452e600233c54418ebbc7283dff525",
-        "GUID:150a9dc9db5bf5f49aad08b824212ad5"
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
