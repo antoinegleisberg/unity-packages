@@ -1,0 +1,14 @@
+{
+    "name": "antoinegleisberg.Noise",
+    "rootNamespace": "antoinegleisberg.Noise",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
