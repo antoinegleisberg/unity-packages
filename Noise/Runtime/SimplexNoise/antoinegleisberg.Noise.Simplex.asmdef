@@ -1,6 +1,6 @@
 {
-    "name": "antoinegleisberg.Math.ProceduralGeneration",
-    "rootNamespace": "antoinegleisberg.Math.ProceduralGeneration",
+    "name": "antoinegleisberg.Noise.Simplex",
+    "rootNamespace": "antoinegleisberg.Noise.Simplex",
     "references": [
         "GUID:9e231bd6491211440b930c6a47b0e255"
     ],

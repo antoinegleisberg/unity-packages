@@ -1,6 +1,6 @@
 {
-    "name": "antoinegleisberg.Noise",
-    "rootNamespace": "antoinegleisberg.Noise",
+    "name": "antoinegleisberg.Noise.PolynomialInterpolation",
+    "rootNamespace": "antoinegleisberg.Noise.PolynomialInterpolation",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

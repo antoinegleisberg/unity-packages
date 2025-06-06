@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 
-namespace antoinegleisberg.Math.ProceduralGeneration
+namespace antoinegleisberg.Noise.PolynomialInterpolation
 {
     public static class PolynomialInterpolationNoise
     {

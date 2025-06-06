@@ -1,7 +1,10 @@
 {
-    "name": "antoinegleisberg.Noise.Editor",
-    "rootNamespace": "antoinegleisberg.Noise.Editor",
-    "references": [],
+    "name": "antoinegleisberg.Noise.Demo",
+    "rootNamespace": "antoinegleisberg.Noise.Demo",
+    "references": [
+        "GUID:046ecd344bd2aa2489bc93214c92b9b0",
+        "GUID:9e231bd6491211440b930c6a47b0e255"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

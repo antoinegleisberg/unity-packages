@@ -4,17 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Vector2 = System.Numerics.Vector2;
-using Random = System.Random;
-using Debug = UnityEngine.Debug;
 
-namespace antoinegleisberg.Math.ProceduralGeneration
+namespace antoinegleisberg.Noise.Simplex
 {
-    public class BaseSimplexNoise
+    internal class SimplexNoise
     {
         private int _permutationTableSize;
         private byte[] _permutationTable;
 
-        public BaseSimplexNoise(int seed = 0, int permutationTableSize = 256)
+        public SimplexNoise(int seed = 0, int permutationTableSize = 256)
         {
             if (seed == 0)
             {
@@ -26,6 +24,12 @@ namespace antoinegleisberg.Math.ProceduralGeneration
             random.NextBytes(_permutationTable);
         }
 
+        /// <summary>
+        /// Can return values slightly larger than 1 or lower than 0
+        /// </summary>
+        /// <param name="X"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public float CalculateNd(List<float> X)
         {
             // N is the number of dimensions
@@ -94,15 +98,6 @@ namespace antoinegleisberg.Math.ProceduralGeneration
             }
 
             float scaledTotalNoise = CalculateScalingFactor(N) * totalContribution;
-
-            if (MathF.Abs(scaledTotalNoise) >= 1.00001f)
-            {
-                // Debug.LogError("Got a noise of more than 1 !!");
-            }
-            else if (MathF.Abs(scaledTotalNoise) >= 0.98f)
-            {
-                // Debug.Log("Got a noise larger than 0.98");
-            }
 
             return scaledTotalNoise;
         }
