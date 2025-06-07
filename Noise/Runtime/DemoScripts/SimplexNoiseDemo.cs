@@ -15,14 +15,15 @@ namespace antoinegleisberg.Noise.Demo
             Lines
         }
 
-        [SerializeField] private List<Pair<float, float>> _amplitudeFrequencyPairs;
+        [SerializeField] private List<Pair<float, float>> _amplitudeFrequencyPairs = new List<Pair<float, float>>() { new Pair<float, float>(1, 0.2f) };
         [SerializeField] private DrawMode _drawMode = DrawMode.Z;
         [SerializeField] private bool _overTime = false;
         [SerializeField] private int _seed = 1;
-        [SerializeField] private int _gridSizeX = 100;
-        [SerializeField] private int _gridSizeZ = 100;
+        [SerializeField] private int _gridSizeX = 25;
+        [SerializeField] private int _gridSizeZ = 25;
         [SerializeField] private float _timeScale = 1f;
-        [SerializeField] private float _scale = 1f;
+        [SerializeField] private float _noiseScale = 1f;
+        [SerializeField] private float _drawScale = 1f;
 
         private float[,] values2D;
         
@@ -41,6 +42,7 @@ namespace antoinegleisberg.Noise.Demo
         private void Generate2D(float time)
         {
             LayeredSimplexNoise layeredSimplexNoise = new LayeredSimplexNoise();
+            
             int i = 0;
             foreach (Pair<float, float> amplFreq in _amplitudeFrequencyPairs)
             {
@@ -53,7 +55,7 @@ namespace antoinegleisberg.Noise.Demo
             {
                 for (int z = 0; z < _gridSizeZ; z++)
                 {
-                    float y = layeredSimplexNoise.Generate(new List<float>() { x * _scale, z * _scale }, new List<float>() { time, 0 });
+                    float y = layeredSimplexNoise.Generate(new List<float>() { x / _noiseScale, z / _noiseScale }, new List<float>() { time, 0 });
                     values2D[x, z] = y;
                 }
             }
@@ -67,15 +69,15 @@ namespace antoinegleisberg.Noise.Demo
                 {
                     for (int z = 0; z < _gridSizeZ; z++)
                     {
-                        float y = values2D[x, z];
+                        float y = values2D[x, z] / 2f + 0.5f;
                         switch (_drawMode)
                         {
                             case DrawMode.Z:
-                                Gizmos.DrawSphere(new Vector3(_scale * x, y, _scale * z), 0.15f);
+                                Gizmos.DrawSphere(new Vector3(_drawScale * x, y, _drawScale * z), 0.15f);
                                 break;
                             case DrawMode.ColoredSpheres:
                                 Gizmos.color = new Color(y, y, y);
-                                Gizmos.DrawSphere(new Vector3(_scale * x, 0, _scale * z), 0.15f);
+                                Gizmos.DrawSphere(new Vector3(_drawScale * x, 0, _drawScale * z), 0.15f);
                                 break;
                             case DrawMode.Lines:
                                 if (x + 1 < _gridSizeX)

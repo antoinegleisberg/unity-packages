@@ -25,7 +25,8 @@ namespace antoinegleisberg.Noise.Simplex
         }
 
         /// <summary>
-        /// Can return values slightly larger than 1 or lower than 0
+        /// Returns a noise value between approximately -1 and 1
+        /// Can return values slightly larger than 1 or lower than -1
         /// </summary>
         /// <param name="X"></param>
         /// <returns></returns>

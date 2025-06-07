@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace antoinegleisberg.Noise.Simplex
 {
-    public class LayeredSimplexNoise
+    public class LayeredSimplexNoise : INoise
     {
         private struct NoiseLayer
         {
