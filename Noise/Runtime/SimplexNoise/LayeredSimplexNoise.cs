@@ -12,15 +12,15 @@ namespace antoinegleisberg.Noise.Simplex
             public float Frequency;
             public SimplexNoise NoiseFunction;
             
-            public float Generate(List<float> coordinates, List<float> offset)
+            public float Generate(List<float> coordinates)
             {
                 float frequency = Frequency;
-                List<float> offsetScaledCoords =
+                List<float> scaledCoords =
                     coordinates
-                    .Zip(offset, (coord, off) => frequency * (coord + off))
+                    .Select(coord => frequency * coord)
                     .ToList();
 
-                return Amplitude * NoiseFunction.CalculateNd(offsetScaledCoords);
+                return Amplitude * NoiseFunction.CalculateNd(scaledCoords);
             }
         }
 
@@ -36,20 +36,10 @@ namespace antoinegleisberg.Noise.Simplex
             _layers.Add(new NoiseLayer() { Amplitude = amplitude, Frequency = frequency, NoiseFunction = new SimplexNoise(seed) });
         }
 
-        public float Generate(List<float> coordinates, List<float> offsets = null)
+        public float Generate(List<float> coordinates)
         {
-            if (offsets == null)
-            {
-                offsets = Enumerable.Repeat(0f, coordinates.Count).ToList();
-            }
-            
-            if (offsets.Count != coordinates.Count)
-            {
-                throw new ArgumentException("Coords and offsets need to have the same dimension");
-            }
-
             return _layers
-                .Select((layer) => layer.Generate(coordinates, offsets))
+                .Select((layer) => layer.Generate(coordinates))
                 .Sum();
         }
     }

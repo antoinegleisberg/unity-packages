@@ -23,7 +23,7 @@ namespace antoinegleisberg.Noise.Simplex
             _seed = seed;
         }
         
-        public float Generate(List<float> coordinates, List<float> offsets = null)
+        public float Generate(List<float> coordinates)
         {
             float totalNoise = 0;
             float currentAmplitude = _initialAmplitude;
@@ -35,13 +35,9 @@ namespace antoinegleisberg.Noise.Simplex
                 noiseSources.Add(new SimplexNoise(seed));
             }
 
-            if (offsets == null) offsets = Enumerable.Repeat(0f, coordinates.Count).ToList();
-
-            List<float> offsetCoords = coordinates.Zip(offsets, (coord, off) => coord + off).ToList();
-
             for (int i = 0; i < _octaves; i++)
             {
-                List<float> scaledCoords = offsetCoords.Select(coord => coord * currentFrequency).ToList();
+                List<float> scaledCoords = coordinates.Select(coord => coord * currentFrequency).ToList();
                 float noise = noiseSources[i].CalculateNd(scaledCoords);
                 totalNoise += noise * currentAmplitude;
                 currentAmplitude *= _persistence;
