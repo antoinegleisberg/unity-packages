@@ -55,7 +55,7 @@ namespace antoinegleisberg.Noise.Demo
             {
                 for (int z = 0; z < _gridSizeZ; z++)
                 {
-                    float y = layeredSimplexNoise.Generate(new List<float>() { x / _noiseScale, z / _noiseScale }, new List<float>() { time, 0 });
+                    float y = layeredSimplexNoise.Generate(new List<float>() { (x + time) / _noiseScale, z / _noiseScale });
                     values2D[x, z] = y;
                 }
             }
