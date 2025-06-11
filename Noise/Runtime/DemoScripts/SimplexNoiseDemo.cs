@@ -21,22 +21,29 @@ namespace antoinegleisberg.Noise.Demo
         [SerializeField] private int _seed = 1;
         [SerializeField] private int _gridSizeX = 25;
         [SerializeField] private int _gridSizeZ = 25;
+        [SerializeField] private Vector2 _gridOffset = Vector2.zero;
         [SerializeField] private float _timeScale = 1f;
-        [SerializeField] private float _noiseScale = 1f;
         [SerializeField] private float _drawScale = 1f;
+
 
         private float[,] values2D;
         
         private IEnumerator Start()
         {
             values2D = new float[_gridSizeX, _gridSizeZ];
-            Generate2D(_timeScale * Time.time);
+            Generate2D(0f);
             while (true)
             {
                 if (_overTime)
                     Generate2D(_timeScale * Time.time);
                 yield return null;
             }
+        }
+
+        private void OnValidate()
+        {
+            values2D = new float[_gridSizeX, _gridSizeZ];
+            Generate2D(0f);
         }
 
         private void Generate2D(float time)
@@ -55,7 +62,7 @@ namespace antoinegleisberg.Noise.Demo
             {
                 for (int z = 0; z < _gridSizeZ; z++)
                 {
-                    float y = layeredSimplexNoise.Generate(new List<float>() { (x + time) / _noiseScale, z / _noiseScale });
+                    float y = layeredSimplexNoise.Generate(new List<float>() { x + time + _gridOffset.x, z + _gridOffset.y });
                     values2D[x, z] = y;
                 }
             }

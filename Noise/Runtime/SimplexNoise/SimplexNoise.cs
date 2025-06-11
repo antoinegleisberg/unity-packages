@@ -9,19 +9,27 @@ namespace antoinegleisberg.Noise.Simplex
 {
     internal class SimplexNoise
     {
-        private int _permutationTableSize;
+        private static readonly int _permutationTableSize = 256;
         private byte[] _permutationTable;
 
-        public SimplexNoise(int seed = 0, int permutationTableSize = 256)
+        public SimplexNoise(int seed = 0)
         {
             if (seed == 0)
             {
                 seed = new Random().Next();
             }
-            _permutationTableSize = permutationTableSize;
+
             _permutationTable = new byte[_permutationTableSize * 2];
             var random = new Random(seed);
+            // Note: this is technically incorrect, as random bytes does not give an actual permutation
+            // Alternative is to create an array of integers from 0 to 255, shuffle it, and then convert it to bytes
             random.NextBytes(_permutationTable);
+            // We want the 2nd half of the permutation table to be a copy of the first half
+            // This allows for faster lookup during computation
+            for (int i = 0; i < _permutationTableSize; i++)
+            {
+                _permutationTable[i + _permutationTableSize] = _permutationTable[i];
+            }
         }
 
         /// <summary>
