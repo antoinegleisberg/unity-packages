@@ -19,7 +19,8 @@ namespace antoinegleisberg.Saving
 
                 string dataToStore = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
                 {
-                    TypeNameHandling = TypeNameHandling.All
+                    TypeNameHandling = TypeNameHandling.All,
+                    Converters = { new ColorConverter(), new Vector3Converter(), new QuaternionConverter() }
                 });
 
                 using (FileStream stream = new FileStream(fullPath, FileMode.Create))
@@ -57,7 +58,8 @@ namespace antoinegleisberg.Saving
 
                     loadedData = JsonConvert.DeserializeObject(dataToLoad, new JsonSerializerSettings
                     {
-                        TypeNameHandling = TypeNameHandling.All
+                        TypeNameHandling = TypeNameHandling.All,
+                        Converters = { new ColorConverter(), new Vector3Converter(), new QuaternionConverter() }
                     });
                     Debug.Log($"Read save data from {fullPath}");
                 }
