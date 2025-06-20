@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -41,6 +40,36 @@ namespace antoinegleisberg.Noise.Simplex
             return _layers
                 .Select((layer) => layer.Generate(coordinates))
                 .Sum();
+        }
+
+        public float Generate1D(float x)
+        {
+            float totalNoise = 0f;
+            foreach (NoiseLayer layer in _layers)
+            {
+                totalNoise += layer.Amplitude * layer.NoiseFunction.Generate1D(layer.Frequency * x);
+            }
+            return totalNoise;
+        }
+
+        public float Generate2D(float x, float y)
+        {
+            float totalNoise = 0f;
+            foreach (NoiseLayer layer in _layers)
+            {
+                totalNoise += layer.Amplitude * layer.NoiseFunction.Generate2D(layer.Frequency * x, layer.Frequency * y);
+            }
+            return totalNoise;
+        }
+
+        public float Generate3D(float x, float y, float z)
+        {
+            float totalNoise = 0f;
+            foreach (NoiseLayer layer in _layers)
+            {
+                totalNoise += layer.Amplitude * layer.NoiseFunction.Generate3D(layer.Frequency * x, layer.Frequency * y, layer.Frequency * z);
+            }
+            return totalNoise;
         }
     }
 }

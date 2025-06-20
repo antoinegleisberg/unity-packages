@@ -46,5 +46,26 @@ namespace antoinegleisberg.Noise.Simplex
 
             return totalNoise;
         }
+
+        public float Generate1D(float x)
+        {
+            // Not optimal in terms of GC allocation
+            List<float> coordinates = new List<float> { x };
+            return Generate(coordinates);
+        }
+
+        public float Generate2D(float x, float y)
+        {
+            // Not optimal in terms of GC allocation
+            List<float> coordinates = new List<float> { x, y };
+            return Generate(coordinates);
+        }
+
+        public float Generate3D(float x, float y, float z)
+        {
+            // Not optimal in terms of GC allocation
+            List<float> coordinates = new List<float> { x, y, z };
+            return Generate(coordinates);
+        }
     }
 }
