@@ -105,25 +105,22 @@ namespace antoinegleisberg.Types
                 throw new ArgumentNullException(nameof(source));
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
+            if (source.Count() == 0)
+                throw new InvalidOperationException("Sequence contains no elements");
 
             Comparer<TKey> comparer = Comparer<TKey>.Default;
-            TSource maxItem = default(TSource);
-            TKey maxValue = default(TKey);
-            bool hasValue = false;
+            TSource maxItem = source.First();
+            TKey maxValue = selector(maxItem);
 
             foreach (var item in source)
             {
                 TKey value = selector(item);
-                if (!hasValue || comparer.Compare(value, maxValue) > 0)
+                if (comparer.Compare(value, maxValue) > 0)
                 {
                     maxItem = item;
                     maxValue = value;
-                    hasValue = true;
                 }
             }
-
-            if (!hasValue)
-                throw new InvalidOperationException("Sequence contains no elements");
 
             return maxItem;
         }
@@ -134,25 +131,22 @@ namespace antoinegleisberg.Types
                 throw new ArgumentNullException(nameof(source));
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
+            if (source.Count() == 0)
+                throw new InvalidOperationException("Sequence contains no elements");
 
             Comparer<TKey> comparer = Comparer<TKey>.Default;
-            TSource minItem = default(TSource);
-            TKey minValue = default(TKey);
-            bool hasValue = false;
+            TSource minItem = source.First();
+            TKey minValue = selector(minItem);
 
             foreach (var item in source)
             {
                 TKey value = selector(item);
-                if (!hasValue || comparer.Compare(value, minValue) < 0)
+                if (comparer.Compare(value, minValue) < 0)
                 {
                     minItem = item;
                     minValue = value;
-                    hasValue = true;
                 }
             }
-
-            if (!hasValue)
-                throw new InvalidOperationException("Sequence contains no elements");
 
             return minItem;
         }
