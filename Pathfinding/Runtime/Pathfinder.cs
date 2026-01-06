@@ -15,7 +15,7 @@ namespace antoinegleisberg.Pathfinding
             _strategy = strategy;
         }
 
-        public static Pathfinder<TNode> GetAStarPathfinder(Func<TNode, TNode, int> heuristicDistance, Func<TNode, List<Pair<TNode, int>>> neighbours)
+        public static Pathfinder<TNode> GetAStarPathfinder(Func<TNode, TNode, int> heuristicDistance, Func<TNode, List<Tuple<TNode, int>>> neighbours)
         {
             AStar<TNode> aStar = new AStar<TNode>(heuristicDistance, neighbours);
 

@@ -1,9 +1,10 @@
-using System;
 using System.Collections.Generic;
+using System;
+using UnityEngine;
 
 namespace antoinegleisberg.Inventory
 {
-    public partial class Inventory<T>
+    public partial class ReservableInventory<T>
     {
         public static Builder CreateBuilder() => new Builder();
 
@@ -11,12 +12,12 @@ namespace antoinegleisberg.Inventory
         {
             private int _maxCapacity = -1;
             private Func<T, int> _itemSizes = null;
-            
+
             private int _maxSlots = -1;
             private Func<T, int> _maxSlotSize = null;
 
             private IReadOnlyDictionary<T, int> _itemCapacities = null;
-            
+
             private IReadOnlyDictionary<T, int> _items = null;
 
             internal Builder() { }
@@ -29,17 +30,14 @@ namespace antoinegleisberg.Inventory
             /// <returns></returns>
             public Builder WithLimitedCapacity(int capacity, Func<T, int> itemSizes)
             {
-                // Disable input check because ReservableInventory may just pass default arguments, which is ok
-                // Maybe I figure out a better way to do this later
-
-                //if (capacity < 0)
-                //{
-                //    throw new ArgumentException("Capacity must be positive or 0");
-                //}
-                //if (itemSizes == null)
-                //{
-                //    throw new ArgumentException("You must provide item sizes");
-                //}
+                if (capacity < 0)
+                {
+                    throw new ArgumentException("Capacity must be positive or 0");
+                }
+                if (itemSizes == null)
+                {
+                    throw new ArgumentException("You must provide item sizes");
+                }
 
                 _maxCapacity = capacity;
                 _itemSizes = itemSizes;
@@ -53,10 +51,10 @@ namespace antoinegleisberg.Inventory
             /// <returns></returns>
             public Builder WithLimitedSlots(int maxSlots)
             {
-                //if (maxSlots < 0)
-                //{
-                //    throw new ArgumentException("MaxSlots must be positive or zero");
-                //}
+                if (maxSlots < 0)
+                {
+                    throw new ArgumentException("MaxSlots must be positive or zero");
+                }
 
                 _maxSlots = maxSlots;
                 return this;
@@ -70,10 +68,10 @@ namespace antoinegleisberg.Inventory
             /// <returns></returns>
             public Builder WithLimitedSlotSize(Func<T, int> maxSlotSize)
             {
-                //if (maxSlotSize == null)
-                //{
-                //    throw new ArgumentException("You must provide slot sizes");
-                //}
+                if (maxSlotSize == null)
+                {
+                    throw new ArgumentException("You must provide slot sizes");
+                }
 
                 _maxSlotSize = maxSlotSize;
                 return this;
@@ -86,10 +84,10 @@ namespace antoinegleisberg.Inventory
             /// <returns></returns>
             public Builder WithPredeterminedItemSet(IReadOnlyDictionary<T, int> itemCapacities)
             {
-                //if (itemCapacities == null)
-                //{
-                //    throw new ArgumentException("You must provide item capacities");
-                //}
+                if (itemCapacities == null)
+                {
+                    throw new ArgumentException("You must provide item capacities");
+                }
 
                 _itemCapacities = itemCapacities;
                 return this;
@@ -102,23 +100,23 @@ namespace antoinegleisberg.Inventory
             /// <returns></returns>
             public Builder WithItems(IReadOnlyDictionary<T, int> items)
             {
-                //if (items == null)
-                //{
-                //    throw new ArgumentException("You must provide non-null items");
-                //}
+                if (items == null)
+                {
+                    throw new ArgumentException("You must provide non-null items");
+                }
 
                 _items = items;
                 return this;
             }
 
-            public Inventory<T> Build()
+            public ReservableInventory<T> Build()
             {
                 if (_maxSlotSize != null && _maxSlots < 0)
                 {
                     // Cannot enforce a slot size with an infinite amount of slots !
                     throw new Exception("Please specify a maximum amount of slots in order to limit the slot size!");
                 }
-                return new Inventory<T>(_maxCapacity, _maxSlots, _itemSizes, _maxSlotSize, _itemCapacities, _items);
+                return new ReservableInventory<T>(_maxCapacity, _maxSlots, _itemSizes, _maxSlotSize, _itemCapacities, _items);
             }
         }
     }

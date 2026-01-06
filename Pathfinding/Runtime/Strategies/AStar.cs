@@ -12,9 +12,9 @@ namespace antoinegleisberg.Pathfinding
         private Dictionary<TNode, TNode> _parents;
         
         private Func<TNode, List<TNode>, int> _heuristicDistance;
-        private Func<TNode, List<Pair<TNode, int>>> _neighboursDistances; // For each neighbour, the distance to it
+        private Func<TNode, List<Tuple<TNode, int>>> _neighboursDistances; // For each neighbour, the distance to it
 
-        public AStar(Func<TNode, TNode, int> heuristicDistance, Func<TNode, List<Pair<TNode, int>>> neighbours)
+        public AStar(Func<TNode, TNode, int> heuristicDistance, Func<TNode, List<Tuple<TNode, int>>> neighbours)
         {
             _heuristicDistance = ConvertHeuristicDistance(heuristicDistance);
             _neighboursDistances = neighbours;
@@ -63,10 +63,10 @@ namespace antoinegleisberg.Pathfinding
                 openList.Remove(currentNode);
                 closedSet.Add(currentNode);
 
-                foreach (Pair<TNode, int> neighbourDistancePair in _neighboursDistances(currentNode))
+                foreach (Tuple<TNode, int> neighbourDistancePair in _neighboursDistances(currentNode))
                 {
-                    TNode neighbour = neighbourDistancePair.First;
-                    int distance = neighbourDistancePair.Second;
+                    TNode neighbour = neighbourDistancePair.Item1;
+                    int distance = neighbourDistancePair.Item2;
 
                     if (closedSet.Contains(neighbour))
                     {

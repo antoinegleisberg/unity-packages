@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace antoinegleisberg.HOA.UI.ColorSetters
+namespace antoinegleisberg.UI.ColorSetters
 {
     [ExecuteAlways]
     public class TextColorSetter : MonoBehaviour

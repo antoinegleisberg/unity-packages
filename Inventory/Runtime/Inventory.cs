@@ -38,7 +38,7 @@ namespace antoinegleisberg.Inventory
         {
             if (!CanAddItems(items))
             {
-                throw new Exception("Cannot add requested items");
+                throw new InvalidOperationException("Cannot add requested items");
             }
 
             foreach (T item in items.Keys)
@@ -89,7 +89,7 @@ namespace antoinegleisberg.Inventory
             return true;
         }
 
-        public int GetItemCount(T item)
+        public int GetAvailableItemCount(T item)
         {
             return _items.GetValueOrDefault(item, 0);
         }
@@ -104,7 +104,12 @@ namespace antoinegleisberg.Inventory
             return _items;
         }
 
-        public bool ContainsItems(IReadOnlyDictionary<T, int> items)
+        public IReadOnlyDictionary<T, int> AvailableItems()
+        {
+            return _items;
+        }
+
+        public bool ContainsAvailableItems(IReadOnlyDictionary<T, int> items)
         {
             foreach (KeyValuePair<T, int> item in items)
             {
@@ -112,7 +117,7 @@ namespace antoinegleisberg.Inventory
                 {
                     continue;
                 }
-                if (!_items.ContainsKey(item.Key) || GetItemCount(item.Key) < item.Value)
+                if (!_items.ContainsKey(item.Key) || GetAvailableItemCount(item.Key) < item.Value)
                 {
                     return false;
                 }
@@ -122,13 +127,12 @@ namespace antoinegleisberg.Inventory
 
         public void RemoveItems(IReadOnlyDictionary<T, int> items)
         {
-            if (!ContainsItems(items))
+            if (!ContainsAvailableItems(items))
             {
-                throw new Exception("These items are not available for removal");
+                throw new InvalidOperationException("These items are not available for removal");
             }
 
-            List<T> itemsToRemove = new List<T>();
-            foreach (T item in items.Keys)
+            foreach (T item in new List<T>(items.Keys))
             {
                 if (items[item] <= 0)
                 {
@@ -137,13 +141,64 @@ namespace antoinegleisberg.Inventory
                 _items[item] -= items[item];
                 if (_items[item] == 0)
                 {
-                    itemsToRemove.Add(item);
+                    _items.Remove(item);
                 }
             }
-            foreach (T item in itemsToRemove)
+        }
+
+        public int GetAvailableCapacityForItem(T item)
+        {
+            int totalAvailableCapacity = int.MaxValue;
+            if (_maxCapacity >= 0)
             {
-                _items.Remove(item);
+                int occupiedCapacity = CalculateCapacity(_items);
+                int availableCapacity = Mathf.FloorToInt((float)(_maxCapacity - occupiedCapacity) / _itemSizes(item));
+                totalAvailableCapacity = Mathf.Min(totalAvailableCapacity, availableCapacity);
             }
+            if (_maxSlots >= 0)
+            {
+                int occupiedSlots = CalculateNumberOfSlots(_items);
+                int availableSlots = _maxSlots - occupiedSlots;
+                int availableCapacity;
+                if (_slotSizes != null)
+                {
+                    availableCapacity = Mathf.FloorToInt((float)availableSlots * _slotSizes(item));  // capacity from filling up free slots
+                    if (GetAvailableItemCount(item) % _slotSizes(item) != 0)
+                    {
+                        // if there is a partially filled slot, account for the remaining capacity from filling up that slot
+                        availableCapacity += _slotSizes(item) - (GetAvailableItemCount(item) % _slotSizes(item));
+                    }
+                    availableSlots *= _slotSizes(item);
+                }
+                else if (availableSlots > 0)
+                {
+                    // If slots can hold any capacity and there is a free slot, then there is infinite capacity
+                    availableCapacity = int.MaxValue;
+                }
+                else
+                {
+                    // All slots are taken, there is only capacity if there is already some of that item in the inventory
+                    availableCapacity = GetAvailableItemCount(item) > 0 ? int.MaxValue : 0;
+                }
+                totalAvailableCapacity = Mathf.Min(totalAvailableCapacity, availableCapacity);
+            }
+            if (_itemCapacities != null)
+            {
+                if (!_itemCapacities.ContainsKey(item))
+                {
+                    return 0;
+                }
+                int availableCapacity = _itemCapacities[item] - GetAvailableItemCount(item);
+                totalAvailableCapacity = Mathf.Min(totalAvailableCapacity, availableCapacity);
+            }
+            return totalAvailableCapacity;
+        }
+
+        public (int addedQuantity, int remainingQuantity) AddAsManyAsPossible(T item, int count)
+        {
+            int addedQuantity = Mathf.Min(GetAvailableCapacityForItem(item), count);
+            AddItems(new Dictionary<T, int>() { { item, addedQuantity } });
+            return (addedQuantity, count - addedQuantity);
         }
 
         private int CalculateCapacity(IReadOnlyDictionary<T, int> items)
@@ -166,9 +221,14 @@ namespace antoinegleisberg.Inventory
             int nSlots = 0;
             foreach (T item in items.Keys)
             {
-                nSlots += (int)Mathf.Ceil((float)items[item] / _slotSizes(item));
+                nSlots += Mathf.CeilToInt((float)items[item] / _slotSizes(item));
             }
             return nSlots;
+        }
+
+        public int OccupiedCapacity()
+        {
+            return CalculateCapacity(_items);
         }
     }
 }

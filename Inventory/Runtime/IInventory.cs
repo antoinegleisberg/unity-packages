@@ -13,17 +13,40 @@ namespace antoinegleisberg.Inventory
         public void AddItems(T item, int count) => AddItems(new Dictionary<T, int>() { { item, count } });
         public void AddItem(T item) => AddItems(item, 1);
         
-        public bool ContainsItems(IReadOnlyDictionary<T, int> items);
-        public bool ContainsItems(T item, int count) => ContainsItems(new Dictionary<T, int>() { { item, count } });
-        public bool Contains(T item) => ContainsItems(item, 1);
+        public bool ContainsAvailableItems(IReadOnlyDictionary<T, int> items);
+        public bool ContainsAvailableItems(T item, int count) => ContainsAvailableItems(new Dictionary<T, int>() { { item, count } });
+        public bool ContainsAvailableItem(T item) => ContainsAvailableItems(item, 1);
         
         public void RemoveItems(IReadOnlyDictionary<T, int> items);
         public void RemoveItems(T item, int count) => RemoveItems(new Dictionary<T, int>() { { item, count } });
         
-        public int GetItemCount(T item);
+        public IReadOnlyDictionary<T, int> AvailableItems();
+
+        public int GetAvailableItemCount(T item);
+
+        public int GetAvailableCapacityForItem(T item);
+
+        public (int addedQuantity, int remainingQuantity) AddAsManyAsPossible(T item, int count);
+
+        public (IReadOnlyDictionary<T, int> addedItems, IReadOnlyDictionary<T, int> remainingItems) AddAsManyAsPossible(IReadOnlyDictionary<T, int> items)
+        {
+            Dictionary<T, int> addedItems = new Dictionary<T, int>();
+            Dictionary<T, int> remainingItems = new Dictionary<T, int>();
+
+            foreach (KeyValuePair<T, int> item in items)
+            {
+                (int addedQuantity, int remainingQuantity) = AddAsManyAsPossible(item.Key, item.Value);
+                addedItems.Add(item.Key, addedQuantity);
+                remainingItems.Add(item.Key, remainingQuantity);
+            }
+
+            return (addedItems, remainingItems);
+        }
 
         public bool IsEmpty();
         
         public IReadOnlyDictionary<T, int> Items();
+
+        public int OccupiedCapacity();
     }
 }

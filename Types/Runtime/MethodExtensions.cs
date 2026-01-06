@@ -11,6 +11,11 @@ namespace antoinegleisberg.Types
         {
             Dictionary<TKey, TValue> dict = new Dictionary<TKey, TValue>();
             
+            if (pairs == null)
+            {
+                return dict;
+            }
+
             foreach (Pair<TKey, TValue> pair in pairs)
             {
                 dict.Add(pair.First, pair.Second);

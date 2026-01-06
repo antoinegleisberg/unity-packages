@@ -1,8 +1,9 @@
-using antoinegleisberg.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
+using antoinegleisberg.Types;
 
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;

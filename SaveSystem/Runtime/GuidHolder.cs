@@ -39,6 +39,7 @@ namespace antoinegleisberg.Saving
 
         private void CreateUID()
         {
+#if UNITY_EDITOR
             SerializedObject serializedObject = new SerializedObject(this);
             SerializedProperty property = serializedObject.FindProperty("_uid");
 
@@ -49,6 +50,14 @@ namespace antoinegleisberg.Saving
             }
 
             _globalLookup[property.stringValue] = this;
+#else
+            if (string.IsNullOrEmpty(_uid) || !IsUnique(_uid))
+            {
+                _uid = Guid.NewGuid().ToString();
+            }
+
+            _globalLookup[_uid] = this;
+#endif
         }
 
         private bool IsUnique(string candidate)

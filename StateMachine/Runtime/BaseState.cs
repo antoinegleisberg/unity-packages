@@ -1,8 +1,6 @@
-using UnityEngine;
-
 namespace antoinegleisberg.StateMachine
 {
-    public abstract class BaseState<T> where T : MonoBehaviour
+    public abstract class BaseState<T>
     {
         public abstract void EnterState(T t);
 

@@ -21,5 +21,10 @@ namespace antoinegleisberg.UI
             IsHovered = false;
             OnHover?.Invoke(false);
         }
+
+        private void OnDestroy()
+        {
+            OnHover = null;
+        }
     }
 }

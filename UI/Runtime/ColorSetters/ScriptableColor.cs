@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace antoinegleisberg.HOA.UI.ColorSetters
+namespace antoinegleisberg.UI.ColorSetters
 {
     [CreateAssetMenu(fileName = "Color", menuName = "ScriptableObject/Color")]
     public class ScriptableColor : ScriptableObject
@@ -8,5 +8,6 @@ namespace antoinegleisberg.HOA.UI.ColorSetters
         [SerializeField] private Color _color;
 
         public Color Color => _color;
+
     }
 }

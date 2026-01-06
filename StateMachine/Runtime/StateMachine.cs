@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using antoinegleisberg.Utils;
+
 namespace antoinegleisberg.StateMachine
 {
-    public class StateMachine<T> where T : MonoBehaviour
+    public class StateMachine<T>
     {
         private Stack<BaseState<T>> _stateStack;
         private T _parentObject;
@@ -15,7 +17,7 @@ namespace antoinegleisberg.StateMachine
             _stateStack = new Stack<BaseState<T>>();
             _stateStack.Push(startState);
 
-            _parentObject.StartCoroutine(Start());
+            CoroutineRunner.GetRunner().StartCoroutine(Start());
         }
 
         public BaseState<T> GetCurrentState()
@@ -50,7 +52,7 @@ namespace antoinegleisberg.StateMachine
             yield return null;
             _stateStack.Peek().EnterState(_parentObject);
 
-            _parentObject.StartCoroutine(UpdateCoroutine());
+            CoroutineRunner.GetRunner().StartCoroutine(UpdateCoroutine());
         }
         
         private IEnumerator UpdateCoroutine()

@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace antoinegleisberg.HOA.UI.ColorSetters
+namespace antoinegleisberg.UI.ColorSetters
 {
     public class ButtonColorSetter : MonoBehaviour
     {

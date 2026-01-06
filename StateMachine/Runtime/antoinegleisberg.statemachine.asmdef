@@ -1,7 +1,9 @@
 {
     "name": "antoinegleisberg.StateMachine",
     "rootNamespace": "antoinegleisberg.StateMachine",
-    "references": [],
+    "references": [
+        "GUID:74111f8d2a177454d860977d1f3460c3"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

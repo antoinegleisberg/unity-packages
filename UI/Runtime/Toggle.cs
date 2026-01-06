@@ -1,5 +1,5 @@
 using antoinegleisberg.Animation;
-using antoinegleisberg.HOA.UI.ColorSetters;
+using antoinegleisberg.UI.ColorSetters;
 using System;
 using System.Collections;
 using UnityEngine;
