@@ -2,6 +2,8 @@ using UnityEngine;
 using System;
 using System.IO;
 using Newtonsoft.Json;
+using antoinegleisberg.Utils;
+using Logger = antoinegleisberg.Utils.Logger;
 
 namespace antoinegleisberg.Saving
 {
@@ -30,11 +32,11 @@ namespace antoinegleisberg.Saving
                         writer.Write(dataToStore);
                     }
                 }
-                Debug.Log($"Save data to {fullPath}");
+                Logger.Info($"Save data to {fullPath}");
             }
             catch (Exception e)
             {
-                Debug.LogError($"Error when saving data to file {fullPath}: {e.Message}");
+                Logger.Critical($"Error when saving data to file {fullPath}: {e.Message}");
             }
         }
 
@@ -61,11 +63,11 @@ namespace antoinegleisberg.Saving
                         TypeNameHandling = TypeNameHandling.All,
                         Converters = { new ColorConverter(), new Vector3Converter(), new QuaternionConverter() }
                     });
-                    Debug.Log($"Read save data from {fullPath}");
+                    Logger.Info($"Read save data from {fullPath}");
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError($"Error when reading save from file {fullPath}: {e.Message}");
+                    Logger.Fatal($"Error when reading save from file {fullPath}: {e.Message}");
                 }
             }
             return loadedData;
@@ -77,11 +79,11 @@ namespace antoinegleisberg.Saving
 
             if (!File.Exists(fullPath))
             {
-                Debug.LogError($"File to delete did not exist:\n{fullPath}");
+                Logger.Error($"File to delete did not exist:\n{fullPath}");
                 return;
             }
 
-            Debug.Log($"Deleted file: {fullPath}");
+            Logger.Info($"Deleted file: {fullPath}");
             File.Delete(fullPath);
         }
     }
