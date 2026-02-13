@@ -17,12 +17,16 @@ namespace antoinegleisberg.Noise.Simplex
         private static readonly int _permutationTableSize = 256;
         private byte[] _permutationTable;
 
+        private readonly float _scalingFactor3D;
+
         public SimplexNoise(int seed = 0)
         {
             if (seed == 0)
             {
                 seed = new Random().Next();
             }
+
+            _scalingFactor3D = CalculateScalingFactor(3);
 
             _permutationTable = new byte[_permutationTableSize * 2];
             var random = new Random(seed);
@@ -72,8 +76,10 @@ namespace antoinegleisberg.Noise.Simplex
         /// <returns></returns>
         public float Generate2D(float x, float y)
         {
-            float F = 0.5f * (MathF.Sqrt(3) - 1);
-            float G = (3 - MathF.Sqrt(3)) / 6;
+            // float F = 0.5f * (MathF.Sqrt(3) - 1);
+            float F = 0.36602540378f;
+            // float G = (3 - MathF.Sqrt(3)) / 6;
+            float G = 0.2113248654f;
 
             // Skew the input coordinates
             float skewingFactor = (x + y) * F;
@@ -138,8 +144,9 @@ namespace antoinegleisberg.Noise.Simplex
                 n2 = t2 * t2 * dotProduct2;
             }
 
-            float maxNoiseValue = MathF.Pow((0.5f - 0.5f / 9), 4) * MathF.Sqrt(0.5f / 9) * MathF.Sqrt(5);  // => only approximately correct?
+            // float maxNoiseValue = MathF.Pow((0.5f - 0.5f / 9), 4) * MathF.Sqrt(0.5f / 9) * MathF.Sqrt(5);  // => only approximately correct?
             // float maxNoiseValue = 0.884343445f / 40f; ==> better? TODO
+            float maxNoiseValue = 0.02056452474f;
 
             return (n0 + n1 + n2) / maxNoiseValue;
         }
@@ -250,9 +257,7 @@ namespace antoinegleisberg.Noise.Simplex
                 n3 = t3 * t3 * dotProduct3;
             }
 
-            float scalingFactor = CalculateScalingFactor(3);
-
-            return scalingFactor * (n0 + n1 + n2 + n3);
+            return _scalingFactor3D * (n0 + n1 + n2 + n3);
         }
 
         /// <summary>
@@ -358,7 +363,6 @@ namespace antoinegleisberg.Noise.Simplex
             float maxNoiseValue = MathF.Pow((r2 - r2 / 9), 4) * MathF.Sqrt(r2 / 9) * gradientNorm;
             return 1.0f / maxNoiseValue;
         }
-
         
 
         #region RandomradientGeneration
