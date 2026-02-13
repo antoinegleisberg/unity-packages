@@ -2,7 +2,8 @@
     "name": "antoinegleisberg.Inventory",
     "rootNamespace": "antoinegleisberg.Inventory",
     "references": [
-        "GUID:9e231bd6491211440b930c6a47b0e255"
+        "GUID:9e231bd6491211440b930c6a47b0e255",
+        "GUID:74111f8d2a177454d860977d1f3460c3"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

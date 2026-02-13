@@ -1,3 +1,4 @@
+using antoinegleisberg.Utils;
 using System;
 using System.Collections.Generic;
 
@@ -86,7 +87,7 @@ namespace antoinegleisberg.Inventory
         {
             if (!ContainsAvailableItems(items))
             {
-                throw new Exception("Cannot remove requested items");
+                throw new InvalidOperationException("Cannot remove requested items");
             }
             _inventoryIncludingReservedCapacity.RemoveItems(items);
             _actualInventory.RemoveItems(items);
@@ -104,7 +105,13 @@ namespace antoinegleisberg.Inventory
         {
             if (!ContainsAvailableItems(items))
             {
-                throw new Exception("Cannot reserve requested items");
+                Logger.Error("Cannot reserve requested items. Debug information:");
+                Logger.Debug($"Actual Inventory: {_actualInventory.GetDebugInformation()}");
+                Logger.Debug($"Available Inventory: {_availableInventory.GetDebugInformation()}");
+                Logger.Debug($"Inventory Including Reserved Capacity: {_inventoryIncludingReservedCapacity.GetDebugInformation()}");
+                Logger.Debug($"Reserved Items For Retrieval: {_reservedItemsForRetreival.GetDebugInformation()}");
+                Logger.Debug($"Capacity Reservations: {_capacityReservations.GetDebugInformation()}");
+                throw new InvalidOperationException("Cannot reserve requested items");
             }
             _reservedItemsForRetreival.AddItems(items);
             _availableInventory.RemoveItems(items);
@@ -118,7 +125,7 @@ namespace antoinegleisberg.Inventory
             {
                 if (!_reservedItemsForRetreival.ContainsAvailableItems(token.Items))
                 {
-                    throw new Exception("Cannot fulfill this reservation");
+                    throw new InvalidOperationException("Cannot fulfill this reservation");
                 }
                 _reservedItemsForRetreival.RemoveItems(token.Items);
                 _inventoryIncludingReservedCapacity.RemoveItems(token.Items);
@@ -128,7 +135,7 @@ namespace antoinegleisberg.Inventory
             {
                 if (!_capacityReservations.ContainsAvailableItems(token.Items))
                 {
-                    throw new Exception("Cannot fulfill this reservation");
+                    throw new InvalidOperationException("Cannot fulfill this reservation");
                 }
                 _capacityReservations.RemoveItems(token.Items);
                 _availableInventory.AddItems(token.Items);
@@ -136,7 +143,7 @@ namespace antoinegleisberg.Inventory
             }
             else
             {
-                throw new Exception("Unknown reservation type");
+                throw new InvalidOperationException("Unknown reservation type");
             }
         }
 
@@ -146,7 +153,7 @@ namespace antoinegleisberg.Inventory
             {
                 if (!_reservedItemsForRetreival.ContainsAvailableItems(token.Items))
                 {
-                    throw new Exception("Cannot cancel this reservation");
+                    throw new InvalidOperationException("Cannot cancel this reservation");
                 }
                 _reservedItemsForRetreival.RemoveItems(token.Items);
                 _availableInventory.AddItems(token.Items);
@@ -155,14 +162,14 @@ namespace antoinegleisberg.Inventory
             {
                 if (!_capacityReservations.ContainsAvailableItems(token.Items))
                 {
-                    throw new Exception("Cannot cancel this reservation");
+                    throw new InvalidOperationException("Cannot cancel this reservation");
                 }
                 _capacityReservations.RemoveItems(token.Items);
                 _inventoryIncludingReservedCapacity.RemoveItems(token.Items);
             }
             else
             {
-                throw new Exception("Unknown reservation type");
+                throw new InvalidOperationException("Unknown reservation type");
             }
         }
 

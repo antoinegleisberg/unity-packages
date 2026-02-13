@@ -1,8 +1,12 @@
-using antoinegleisberg.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
+using antoinegleisberg.Types;
+
+using Logger = antoinegleisberg.Utils.Logger;
+
 
 namespace antoinegleisberg.Inventory
 {
@@ -201,6 +205,19 @@ namespace antoinegleisberg.Inventory
             return (addedQuantity, count - addedQuantity);
         }
 
+        public int OccupiedCapacity()
+        {
+            return CalculateCapacity(_items);
+        }
+
+        public string GetDebugInformation()
+        {
+            return
+                $"Config: maxCapacity={_maxCapacity}; maxSlots={_maxSlots};" +
+                $"itemCapacities={string.Join(", ", _itemCapacities.Select((KeyValuePair<T, int> kvp) => $"{kvp.Key}:{kvp.Value}"))}" +
+                $"items={string.Join(", ", _items.Select((KeyValuePair<T, int> kvp) => $"{kvp.Key}:{kvp.Value}"))}";
+        }
+
         private int CalculateCapacity(IReadOnlyDictionary<T, int> items)
         {
             int capacity = 0;
@@ -224,11 +241,6 @@ namespace antoinegleisberg.Inventory
                 nSlots += Mathf.CeilToInt((float)items[item] / _slotSizes(item));
             }
             return nSlots;
-        }
-
-        public int OccupiedCapacity()
-        {
-            return CalculateCapacity(_items);
         }
     }
 }
