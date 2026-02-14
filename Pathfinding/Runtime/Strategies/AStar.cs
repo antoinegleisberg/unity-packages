@@ -32,7 +32,6 @@ namespace antoinegleisberg.Pathfinding
 
         public List<TNode> FindPath(List<TNode> startNodes, List<TNode> endNodes)
         {
-            // ToDo: implement priority queue to optimise this
             PriorityQueue<TNode, PathPriority> openSet = new PriorityQueue<TNode, PathPriority>();  // min-heap, smallest priority first
             HashSet<TNode> closedSet = new HashSet<TNode>();
 

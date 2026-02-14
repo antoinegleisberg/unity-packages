@@ -42,7 +42,7 @@ namespace antoinegleisberg.Noise.Simplex
                 .Sum();
         }
 
-        // ToDo: need to optimise this
+        // ToDo: need to optimise this (by burst compiling and/or generating an array at once?)
         public float Generate1D(float x)
         {
             float totalNoise = 0f;
@@ -53,7 +53,7 @@ namespace antoinegleisberg.Noise.Simplex
             return totalNoise;
         }
 
-        // ToDo: need to optimise this
+        // ToDo: need to optimise this (by burst compiling and/or generating an array at once?)
         public float Generate2D(float x, float y)
         {
             float totalNoise = 0f;
@@ -64,7 +64,7 @@ namespace antoinegleisberg.Noise.Simplex
             return totalNoise;
         }
 
-        // ToDo: need to optimise this
+        // ToDo: need to optimise this (by burst compiling and/or generating an array at once?)
         public float Generate3D(float x, float y, float z)
         {
             float totalNoise = 0f;
