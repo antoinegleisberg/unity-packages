@@ -1,7 +1,7 @@
 using antoinegleisberg.Types;
 using System;
 using System.Collections.Generic;
-
+using UnityEngine;
 using Utils;
 
 namespace antoinegleisberg.Pathfinding

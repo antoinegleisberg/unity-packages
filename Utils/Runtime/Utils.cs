@@ -1,5 +1,7 @@
+using NUnit.Framework;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 using Object = UnityEngine.Object;
@@ -16,6 +18,16 @@ namespace antoinegleisberg.Utils
                 action();
             }
             CoroutineRunner.GetRunner().StartCoroutine(InvokeAfterCoroutine());
+        }
+
+        public static List<Transform> Children(this Transform transform)
+        {
+            List<Transform> children = new List<Transform>();
+            foreach (Transform child in transform)
+            {
+                children.Add(child);
+            }
+            return children;
         }
 
         private static void DestroyGameObjectByName(string name)

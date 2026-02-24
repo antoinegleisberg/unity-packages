@@ -1,6 +1,7 @@
 using antoinegleisberg.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 
 namespace antoinegleisberg.Inventory
@@ -106,6 +107,7 @@ namespace antoinegleisberg.Inventory
             if (!ContainsAvailableItems(items))
             {
                 Logger.Error("Cannot reserve requested items. Debug information:");
+                Logger.Debug($"Trying to reserve {string.Join(", ", items.Select((KeyValuePair<T, int> kvp) => $"{kvp.Key}: {kvp.Value}"))}");
                 Logger.Debug($"Actual Inventory: {_actualInventory.GetDebugInformation()}");
                 Logger.Debug($"Available Inventory: {_availableInventory.GetDebugInformation()}");
                 Logger.Debug($"Inventory Including Reserved Capacity: {_inventoryIncludingReservedCapacity.GetDebugInformation()}");

@@ -212,10 +212,14 @@ namespace antoinegleisberg.Inventory
 
         public string GetDebugInformation()
         {
-            return
-                $"Config: maxCapacity={_maxCapacity}; maxSlots={_maxSlots};" +
-                $"itemCapacities={string.Join(", ", _itemCapacities.Select((KeyValuePair<T, int> kvp) => $"{kvp.Key}:{kvp.Value}"))}" +
-                $"items={string.Join(", ", _items.Select((KeyValuePair<T, int> kvp) => $"{kvp.Key}:{kvp.Value}"))}";
+            string info = $"Config: maxCapacity={_maxCapacity}; maxSlots={_maxSlots};\n";
+            if (_itemCapacities != null)
+            {
+                info += $"itemCapacities={string.Join(", ", _itemCapacities.Select((KeyValuePair<T, int> kvp) => $"{kvp.Key}:{kvp.Value}"))};\n";
+            }
+            info += $"items={string.Join(", ", _items.Select((KeyValuePair<T, int> kvp) => $"{kvp.Key}:{kvp.Value}"))}";
+
+            return info;
         }
 
         private int CalculateCapacity(IReadOnlyDictionary<T, int> items)
