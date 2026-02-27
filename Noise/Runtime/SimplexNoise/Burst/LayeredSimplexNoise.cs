@@ -16,7 +16,7 @@ namespace antoinegleisberg.Noise.Simplex.Burst
             public int Seed;
         }
 
-        private List<NoiseLayer> _layers;
+        private List<NoiseLayer> _layers = new List<NoiseLayer>();
 
         public void AddLayer(float amplitude, float frequency, int seed)
         {
