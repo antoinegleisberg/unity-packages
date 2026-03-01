@@ -21,8 +21,20 @@ namespace antoinegleisberg.Inventory
 
         private ReservableInventory(int maxCapacity, int maxSlots, Func<T, int> itemSizes, Func<T, int> slotSizes, IReadOnlyDictionary<T, int> itemCapacities, IReadOnlyDictionary<T, int> items)
         {
-            _actualInventory = Inventory<T>.CreateBuilder().Build();
-            _availableInventory = Inventory<T>.CreateBuilder().Build();
+            _actualInventory = Inventory<T>.CreateBuilder()
+                .WithLimitedCapacity(maxCapacity, itemSizes)
+                .WithLimitedSlots(maxSlots)
+                .WithLimitedSlotSize(slotSizes)
+                .WithPredeterminedItemSet(itemCapacities)
+                .WithItems(items)
+                .Build();
+            _availableInventory = Inventory<T>.CreateBuilder()
+                .WithLimitedCapacity(maxCapacity, itemSizes)
+                .WithLimitedSlots(maxSlots)
+                .WithLimitedSlotSize(slotSizes)
+                .WithPredeterminedItemSet(itemCapacities)
+                .WithItems(items)
+                .Build();
             _inventoryIncludingReservedCapacity = Inventory<T>.CreateBuilder()
                 .WithLimitedCapacity(maxCapacity, itemSizes)
                 .WithLimitedSlots(maxSlots)
@@ -30,8 +42,20 @@ namespace antoinegleisberg.Inventory
                 .WithPredeterminedItemSet(itemCapacities)
                 .WithItems(items)
                 .Build();
-            _reservedItemsForRetreival = Inventory<T>.CreateBuilder().Build();
-            _capacityReservations = Inventory<T>.CreateBuilder().Build();
+            _reservedItemsForRetreival = Inventory<T>.CreateBuilder()
+                .WithLimitedCapacity(maxCapacity, itemSizes)
+                .WithLimitedSlots(maxSlots)
+                .WithLimitedSlotSize(slotSizes)
+                .WithPredeterminedItemSet(itemCapacities)
+                .WithItems(items)
+                .Build();
+            _capacityReservations = Inventory<T>.CreateBuilder()
+                .WithLimitedCapacity(maxCapacity, itemSizes)
+                .WithLimitedSlots(maxSlots)
+                .WithLimitedSlotSize(slotSizes)
+                .WithPredeterminedItemSet(itemCapacities)
+                .WithItems(items)
+                .Build();
         }
 
         public (int addedQuantity, int remainingQuantity) AddAsManyAsPossible(T item, int count)
